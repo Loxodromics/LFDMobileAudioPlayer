@@ -15,25 +15,27 @@
 #endif
 
 #ifdef Q_OS_ANDROID
-//#include <QMediaPlayer>
 #include "src/android/androidaudioplayer.h"
 #endif
 
 #ifdef Q_OS_ANDROID
-QObject* rootObject;
-//QMediaPlayer* mMediaplayer;
 
 JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv*, jobject, jint focusChange)
 {
-	static int lastfocus = 0;
-	rootObject->setProperty("command", focusChange);
-	qDebug()<<"Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod "<<focusChange;
+	/// TODO
+//	static int lastfocus = 0;
+//	rootObject->setProperty("command", focusChange);
+	qDebug() << "Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod " << focusChange;
 
 	return 1;
 }
 
 JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_StringReceiver(JNIEnv *env, jobject var2, jstring string)
 {
+	Q_UNUSED(env);
+	Q_UNUSED(var2);
+	Q_UNUSED(string);
+
 	return 1;
 }
 #endif ///Q_OS_ANDROID
@@ -45,14 +47,11 @@ int main(int argc, char *argv[])
 	QQmlApplicationEngine engine;
 
 #ifdef Q_OS_IOS
-//	qmlRegisterType<LFD::IosAudioPlayer>("IosAudioPlayer", 1, 0, "IosAudioPlayer");
 	LFD::IosAudioPlayer audioPlayer;
 	engine.rootContext()->setContextProperty("AudioPlayer", &audioPlayer);
 #endif
 
 #ifdef Q_OS_ANDROID
-//	ahmed::RadioStatiosContainer Container;
-//	engine.rootContext()->setContextProperty("radioStatiosContainer", &Container);
 	LFD::AndroidAudioPlayer audioPlayer;
 	engine.rootContext()->setContextProperty("AudioPlayer", &audioPlayer);
 #endif ///Q_OS_ANDROID
@@ -60,12 +59,6 @@ int main(int argc, char *argv[])
 	engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 	if (engine.rootObjects().isEmpty())
 		return -1;
-
-#ifdef Q_OS_ANDROID
-//	Containerpointer = &Container;
-	rootObject = engine.rootObjects().first();
-	qDebug()<<"niExport_StringReceiver ";
-#endif ///Q_OS_ANDROID
 
 	return app.exec();
 }
