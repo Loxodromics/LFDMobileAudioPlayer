@@ -8,7 +8,7 @@ ApplicationWindow {
     height: 640
     title: qsTr("LFD Mobile Music Player")
 
-    property bool isPlaying: false
+    property bool isPlaying: AudioPlayer.playing
 
     Rectangle {
         id: background
@@ -35,12 +35,10 @@ ApplicationWindow {
         text: (isPlaying ? "Pause" : "Play")
 
         onClicked: {
-            AudioPlayer.setMediaPath("http://ice1.somafm.com/groovesalad-128-mp3")
             if (isPlaying)
                 AudioPlayer.pause()
             else
                 AudioPlayer.play()
-            isPlaying = !isPlaying
         }
     }
 

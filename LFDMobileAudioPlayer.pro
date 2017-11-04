@@ -50,7 +50,7 @@ ios {
 } # ios
 
 android {
-    QT += androidextras multimedia
+    QT += androidextras
 
     HEADERS += \
         src/android/androidaudioplayer.h

@@ -16,6 +16,7 @@
 
 #ifdef Q_OS_ANDROID
 #include "src/android/androidaudioplayer.h"
+LFD::AndroidAudioPlayer* audioPlayer;
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -25,7 +26,8 @@ JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport
 	/// TODO
 //	static int lastfocus = 0;
 //	rootObject->setProperty("command", focusChange);
-	qDebug() << "Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod " << focusChange;
+	qDebug() << "yyy_Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod " << focusChange;
+	audioPlayer->setFocus(focusChange);
 
 	return 1;
 }
@@ -52,8 +54,8 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef Q_OS_ANDROID
-	LFD::AndroidAudioPlayer audioPlayer;
-	engine.rootContext()->setContextProperty("AudioPlayer", &audioPlayer);
+	audioPlayer = new LFD::AndroidAudioPlayer();
+	engine.rootContext()->setContextProperty("AudioPlayer", audioPlayer);
 #endif ///Q_OS_ANDROID
 
 	engine.load(QUrl(QLatin1String("qrc:/main.qml")));

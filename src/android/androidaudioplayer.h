@@ -23,6 +23,13 @@ namespace LFD {
 class AndroidAudioPlayer : public AudioPlayer
 {
 public:
+
+	enum class FocusState : int
+	{
+		Playing = 0,
+		Paused = 1
+	};
+
 	explicit AndroidAudioPlayer( QObject* parent = nullptr );
 
 	/// AudioPlayer override
@@ -30,9 +37,7 @@ public:
 	Q_INVOKABLE virtual void pause() override;
 
 	virtual void setMedia(const AudioMedia* media) override;
-
-public slots:
-//	void statusChanged(QMediaPlayer::MediaStatus status);
+	void setFocus(int focus);
 };
 
 } /// namespace LFD

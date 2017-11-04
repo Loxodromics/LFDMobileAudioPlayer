@@ -44,11 +44,21 @@ void AndroidAudioPlayer::setMedia(const AudioMedia* media)
 	});
 }
 
-//void AndroidAudioPlayer::statusChanged(QMediaPlayer::MediaStatus status)
-//{
-//	/// TODO
-//	qDebug() << "statusChanged" << status;
-//}
+void AndroidAudioPlayer::setFocus(int focus)
+{
+	qDebug() << "AndroidAudioPlayer::setFocus" << focus;
+	switch (static_cast<FocusState>(focus)) {
+	case FocusState::Paused:
+		this->setPlayingState( PlayingState::Paused );
+		break;
+	case FocusState::Playing:
+		this->setPlayingState( PlayingState::Playing );
+		break;
+	default:
+		qDebug() << "unknow FocusState:" << focus;
+		break;
+	}
 
+}
 
 } /// namespace LFD
