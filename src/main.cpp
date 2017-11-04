@@ -7,15 +7,18 @@
 //
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#ifdef Q_OS_IOS
 #include "src/ios/iosaudioplayer.h"
+#endif
 
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QGuiApplication app(argc, argv);
 
+#ifdef Q_OS_IOS
 	qmlRegisterType<LFD::IosAudioPlayer>("IosAudioPlayer", 1, 0, "IosAudioPlayer");
-
+#endif
 	QQmlApplicationEngine engine;
 	engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 	if (engine.rootObjects().isEmpty())
