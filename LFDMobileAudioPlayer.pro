@@ -31,21 +31,38 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 ios {
+    QMAKE_CXXFLAGS += -fobjc-arc
 
-QMAKE_CXXFLAGS += -fobjc-arc
+    HEADERS += \
+        src/ios/LFDAudioPlayerConstants.h \
+        src/ios/LFDAudioPlayer.h \
+        src/ios/iosaudioplayer.h
 
-HEADERS += \
-    src/ios/LFDAudioPlayerConstants.h \
-    src/ios/LFDAudioPlayer.h \
-    src/ios/iosaudioplayer.h
+    SOURCES += src/ios/LFDAudioPlayerConstants.mm \
+        src/ios/LFDAudioPlayer.mm \
+        src/ios/iosaudioplayer.mm
 
-SOURCES += src/ios/LFDAudioPlayerConstants.mm \
-    src/ios/LFDAudioPlayer.mm \
-    src/ios/iosaudioplayer.mm
+        LIBS += -framework AVFoundation -framework Foundation -framework MediaPlayer
 
-    LIBS += -framework AVFoundation -framework Foundation -framework MediaPlayer
+        resourceFiles.files += resources/filtermusic-logo.jpg
+        resourceFiles.path = res
+        QMAKE_BUNDLE_DATA += resourceFiles
+} # ios
 
-    resourceFiles.files += resources/filtermusic-logo.jpg
-    resourceFiles.path = res
-    QMAKE_BUNDLE_DATA += resourceFiles
-}
+android {
+    QT += androidextras multimedia
+
+    HEADERS += \
+        src/android/radiostation.h
+
+    SOURCES += \
+        src/android/radiostation.cpp
+
+    DISTFILES += \
+        android/src/com/ahmed/QAndroidResultReceiver/jniExport/jniExport.java \
+        android/src/com/ahmed/biladiradio/* \
+        android/AndroidManifest.xml
+
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+} # android
