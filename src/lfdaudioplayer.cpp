@@ -31,7 +31,7 @@ AudioPlayer::AudioPlayer(QObject* parent)
 								   "Artitst",
 								   "LFD Audio Player",
 								   localImageUrl,
-								   "http://ice1.somafm.com/groovesalad-128-aac" );
+								   "http://ice1.somafm.com/groovesalad-128-mp3" );
 }
 
 bool AudioPlayer::playing() const

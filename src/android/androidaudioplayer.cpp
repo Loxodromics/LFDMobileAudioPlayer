@@ -1,41 +1,54 @@
 //
 //  androidaudioplayer.cpp
-//  %PROJECT_NAME%
+//  LFD Audio Player
 //
-//  Created by philipp2 on 04.11.2017.
+//  Created by philipp on 04.11.2017.
 //  Copyright (c) 2017 Philipp Engelhard. All rights reserved.
 //
 #include "androidaudioplayer.h"
+#include <QDebug>
 
-namespace LFD {
-
-AndroidAudioPlayer::AndroidAudioPlayer(QObject* parent)
-	: AudioPlayer(parent),
-	  radioStatiosContainer(new ahmed::RadioStatiosContainer())
+namespace LFD
 {
 
+AndroidAudioPlayer::AndroidAudioPlayer(QObject* parent)
+	: AudioPlayer(parent)
+{
+	/// for testing
+	this->setMedia(this->media());
 }
 
 void AndroidAudioPlayer::play()
 {
-	//if ( !this->radioStatiosContainer->isplaying() )
-	{
-		this->radioStatiosContainer->togglePlayer();
-	}
+	QtAndroid::runOnAndroidThread([] {
+		QtAndroid::androidActivity().callMethod<void>("playstation");
+	});
 }
 
 void AndroidAudioPlayer::pause()
 {
-//	if ( this->radioStatiosContainer->isplaying() )
-	{
-		this->radioStatiosContainer->togglePlayer();
-	}
+	QtAndroid::runOnAndroidThread([] {
+		QtAndroid::androidActivity().callMethod<void>("pausestation");
+	});
 }
 
-void AndroidAudioPlayer::setMediaPath(QString mediaPath)
+void AndroidAudioPlayer::setMedia(const AudioMedia* media)
 {
-	AudioPlayer::setMediaPath(mediaPath);
-	this->radioStatiosContainer->setStation(mediaPath);
+	AudioPlayer::setMedia(media);
+
+	qDebug() << "updateStation";
+	const QString stationUrl = this->media()->url();
+	QtAndroid::runOnAndroidThread([stationUrl] {
+		QtAndroid::androidActivity().callMethod<void>("setestation","(Ljava/lang/String;)V",
+													  QAndroidJniObject::fromString(stationUrl).object<jstring>());
+	});
 }
 
-} // namespace LFD
+//void AndroidAudioPlayer::statusChanged(QMediaPlayer::MediaStatus status)
+//{
+//	/// TODO
+//	qDebug() << "statusChanged" << status;
+//}
+
+
+} /// namespace LFD

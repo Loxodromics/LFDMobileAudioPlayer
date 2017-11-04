@@ -1,15 +1,22 @@
 //
 //  androidaudioplayer.h
-//  %PROJECT_NAME%
+//  LFD Audio Player
 //
-//  Created by philipp2 on 04.11.2017.
+//  Created by philipp on 04.11.2017.
 //  Copyright (c) 2017 Philipp Engelhard. All rights reserved.
 //
 #ifndef LFD_ANDROIDAUDIOPLAYER_H
 #define LFD_ANDROIDAUDIOPLAYER_H
 
 #include "src/lfdaudioplayer.h"
-#include "src/android/radiostation.h"
+//#include <QMediaPlayer>
+#include <QtAndroid>
+
+#define AUDIOFOCUS_GAIN 1
+#define AUDIOFOCUS_LOSS -1
+#define AUDIOFOCUS_LOSS_TRANSIENT -2
+#define AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -3
+#define BACK_BUTTON_PRESSED 2
 
 namespace LFD {
 
@@ -22,13 +29,18 @@ public:
 	Q_INVOKABLE virtual void play() override;
 	Q_INVOKABLE virtual void pause() override;
 
-public slots:
-	virtual void setMediaPath( QString mediaPath ) override;
+	virtual void setMedia(const AudioMedia* media) override;
 
-protected:
-	ahmed::RadioStatiosContainer* radioStatiosContainer;
+public slots:
+//	void statusChanged(QMediaPlayer::MediaStatus status);
 };
 
 } /// namespace LFD
+
+extern "C" {
+JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv *, jobject, jint);
+
+JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_StringReceiver(JNIEnv *var1, jobject var2, jstring string);
+}
 
 #endif /// LFD_ANDROIDAUDIOPLAYER_H

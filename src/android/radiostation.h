@@ -1,5 +1,5 @@
-#ifndef RADIOSTATION_H
-#define RADIOSTATION_H
+#ifndef AHMED_RADIOSTATION_H
+#define AHMED_RADIOSTATION_H
 #include <QObject>
 #include <QList>
 #include <QMediaPlayer>
@@ -17,8 +17,8 @@
 #define AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -3
 #define BACK_BUTTON_PRESSED 2
 
-QStringList QVariantList_to_QStringList(const QVariantList s);
-QVariantList QStringList_to_QVariantList(const QStringList s);
+//QStringList QVariantList_to_QStringList(const QVariantList s);
+//QVariantList QStringList_to_QVariantList(const QStringList s);
 
 namespace ahmed {
 
@@ -31,27 +31,25 @@ class RadioStatiosContainer : public QObject
 signals:
 	void closeApp();
 	void newStatusChanged(QMediaPlayer::MediaStatus status);
+
 public slots:
-	void statusChanged(QMediaPlayer::MediaStatus status)
-	{
-		qDebug()<<"statusChanged";
-		emit newStatusChanged(status);
-	}
+	void statusChanged(QMediaPlayer::MediaStatus status);
+
 public:
 	RadioStatiosContainer();
 	~RadioStatiosContainer();
 	Q_INVOKABLE void setStation(const QString id);
 	Q_INVOKABLE void togglePlayer();
 	Q_INVOKABLE int isplaying();
-	Q_INVOKABLE void StopStation();
+	Q_INVOKABLE void pauseStation();
+	Q_INVOKABLE void playStation();
 	Q_INVOKABLE void changeNotificationTitle(QString title);
-	QObject *rootObject;
 };
 } /// namespace ahmed
 
 #ifdef Q_OS_ANDROID
-#include <QtAndroid>
 
+#include <QtAndroid>
 
 extern "C" {
 JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod
@@ -61,4 +59,4 @@ JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport
 (JNIEnv *var1, jobject var2, jstring string);
 }
 #endif
-#endif // RADIOSTATION_H
+#endif /// AHMED_RADIOSTATION_H

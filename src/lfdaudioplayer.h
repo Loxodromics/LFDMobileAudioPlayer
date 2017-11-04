@@ -43,7 +43,7 @@ public:
 	AudioPlayer::PlayingState playingState() const;
 
 	const AudioMedia* media() const;
-	void setMedia(const AudioMedia* media);
+	virtual void setMedia(const AudioMedia* media);
 
 public slots:
 	virtual void setMediaPath( QString mediaPath );

@@ -8,21 +8,20 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QDebug>
 
 #ifdef Q_OS_IOS
 #include "src/ios/iosaudioplayer.h"
 #endif
 
 #ifdef Q_OS_ANDROID
-#include <QMediaPlayer>
-#include "src/android/radiostation.h"
+//#include <QMediaPlayer>
 #include "src/android/androidaudioplayer.h"
 #endif
 
 #ifdef Q_OS_ANDROID
 QObject* rootObject;
-QMediaPlayer* mMediaplayer;
-ahmed::RadioStatiosContainer* Containerpointer;
+//QMediaPlayer* mMediaplayer;
 
 JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv*, jobject, jint focusChange)
 {
