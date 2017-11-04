@@ -20,31 +20,34 @@
 QStringList QVariantList_to_QStringList(const QVariantList s);
 QVariantList QStringList_to_QVariantList(const QStringList s);
 
+namespace ahmed {
+
 class RadioStatiosContainer : public QObject
 {
-    Q_OBJECT
-    QString currentStation;
-    int state;
+	Q_OBJECT
+	QString currentStation;
+	int state;
 
 signals:
-    void closeApp();
-    void newStatusChanged(QMediaPlayer::MediaStatus status);
+	void closeApp();
+	void newStatusChanged(QMediaPlayer::MediaStatus status);
 public slots:
-    void statusChanged(QMediaPlayer::MediaStatus status)
-    {
-        qDebug()<<"statusChanged";
-        emit newStatusChanged(status);
-    }
+	void statusChanged(QMediaPlayer::MediaStatus status)
+	{
+		qDebug()<<"statusChanged";
+		emit newStatusChanged(status);
+	}
 public:
-    RadioStatiosContainer();
-    ~RadioStatiosContainer();
-    Q_INVOKABLE void setStation(const QString id);
-    Q_INVOKABLE void togglePlayer();
-    Q_INVOKABLE int isplaying();
-    Q_INVOKABLE void StopStation();
-    Q_INVOKABLE void changeNotificationTitle(QString title);
-    QObject *rootObject;
+	RadioStatiosContainer();
+	~RadioStatiosContainer();
+	Q_INVOKABLE void setStation(const QString id);
+	Q_INVOKABLE void togglePlayer();
+	Q_INVOKABLE int isplaying();
+	Q_INVOKABLE void StopStation();
+	Q_INVOKABLE void changeNotificationTitle(QString title);
+	QObject *rootObject;
 };
+} /// namespace ahmed
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>

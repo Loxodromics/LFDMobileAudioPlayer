@@ -53,10 +53,12 @@ android {
     QT += androidextras multimedia
 
     HEADERS += \
-        src/android/radiostation.h
+        src/android/radiostation.h \
+        src/android/androidaudioplayer.h
 
     SOURCES += \
-        src/android/radiostation.cpp
+        src/android/radiostation.cpp \
+        src/android/androidaudioplayer.cpp
 
     DISTFILES += \
         android/src/com/ahmed/QAndroidResultReceiver/jniExport/jniExport.java \

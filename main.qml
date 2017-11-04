@@ -35,6 +35,11 @@ ApplicationWindow {
         text: (isPlaying ? "Pause" : "Play")
 
         onClicked: {
+            AudioPlayer.setMediaPath("http://ice1.somafm.com/groovesalad-128-mp3")
+            if (isPlaying)
+                AudioPlayer.pause()
+            else
+                AudioPlayer.play()
             isPlaying = !isPlaying
         }
     }
