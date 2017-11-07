@@ -31,33 +31,33 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 		mMediaBrowserCompat.disconnect();
 		}
 
-    public void playstation() {
+	public void playstation() {
 		Intent i = new Intent("android.intent.action.MAIN").putExtra("cmd", 1);
 		sendBroadcast(i);
 		}
 
-    public void pausestation() {
+	public void pausestation() {
 		Intent i = new Intent("android.intent.action.MAIN").putExtra("cmd", 0);
 		sendBroadcast(i);
 		}
 
-    public void setestation(String url) {
+	public void setestation(String url) {
 		Intent i = new Intent("android.intent.action.MAIN").putExtra("url", url);
 		sendBroadcast(i);
 		}
 
-    public void setnotificationtext(String txt) {
+	public void setnotificationtext(String txt) {
 		Intent i = new Intent("android.intent.action.MAIN").putExtra("txt", txt);
 		Log.d("mMediaControllerCompat", "setnotificationtext " + txt);
 		sendBroadcast(i);
 		}
 
-    public void togglestate() {
+	public void togglestate() {
 		if (mCurrentState == STATE_PAUSED) {
 			playstation();
 			mCurrentState = STATE_PLAYING;
 			} else {
-		    pausestation();
+			pausestation();
 			mCurrentState = STATE_PAUSED;
 			}
 	}
@@ -69,7 +69,7 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 				mMediaBrowserCompat.connect();
 		}
 
-    private MediaBrowserCompat mMediaBrowserCompat;
+	private MediaBrowserCompat mMediaBrowserCompat;
 	private MediaControllerCompat mMediaControllerCompat;
 
 	private MediaBrowserCompat.ConnectionCallback mMediaBrowserCompatConnectionCallback = new MediaBrowserCompat.ConnectionCallback() {
@@ -99,18 +99,17 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 			if (state == null) {
 				return;
 				}
-		    switch (state.getState()) {
+			switch (state.getState()) {
 				case PlaybackStateCompat.STATE_PLAYING: {
 					mCurrentState = STATE_PLAYING;
 					m_jniExport.intMethod(0);
-					m_jniExport.titleReporter("mStreamTitle");
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PLAYING;");
 					break;
 					}
-			    case PlaybackStateCompat.STATE_PAUSED: {
+				case PlaybackStateCompat.STATE_PAUSED: {
 					mCurrentState = STATE_PAUSED;
 					m_jniExport.intMethod(1);
-					m_jniExport.titleReporter("mStreamTitle");
+					m_jniExport.titleReporter("");
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PAUSED;");
 					break;
 					}

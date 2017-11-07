@@ -335,9 +335,9 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 		metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, mArtist);
 		metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, 1);
 		metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, 1);
-		metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, mAlbumBitMap);
-		metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, mAlbumBitMap);
-		mMediaSessionCompat.setMetadata(metadataBuilder.build());
+//		metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, mAlbumBitMap);
+//		metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, mAlbumBitMap);
+        mMediaSessionCompat.setMetadata(metadataBuilder.build());
 	}
 
     private boolean successfullyRetrievedAudioFocus() {
@@ -456,30 +456,32 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 		}
 
 	    public void run() {
-			try {
-				Log.d("TAG", "        public void run() {");
-				icy = new IcyStreamMeta(new URL(StationUrl));
-				mArtist = icy.getArtist();
-				mTitle = icy.getTitle();
-				mStreamTitle = icy.getStreamTitle();
+			if (mMediaPlayer.isPlaying()) {
+				try {
+					Log.d("TAG", "        public void run() {");
+					icy = new IcyStreamMeta(new URL(StationUrl));
+					mArtist = icy.getArtist();
+					mTitle = icy.getTitle();
+					mStreamTitle = icy.getStreamTitle();
 
-				m_jniExport.titleReporter(mStreamTitle);
+					m_jniExport.titleReporter(mStreamTitle);
 
-				Log.d("TAG", mArtist + "  ************ " + mTitle);
-				if (current_song != mTitle) {
-					current_song = mTitle;
-					mAlbumurl = fetchForArtwork(mArtist, mTitle);
-					mAlbumBitMap = bitMapDownloader(mAlbumurl);
-					if (mArtist == "") mArtist = "Unknown";
-					if (mTitle == "") mTitle = "Unknown";
-					Log.d("TAG", mArtist + "  ************ " + mTitle + "********************** " + mAlbumurl);
-					initMediaSessionMetadata();
-					showPlayingNotification();
+					Log.d("TAG", mArtist + "  ************ " + mTitle);
+					if (current_song != mTitle) {
+						current_song = mTitle;
+	//					mAlbumurl = fetchForArtwork(mArtist, mTitle);
+	//					mAlbumBitMap = bitMapDownloader(mAlbumurl);
+	//					if (mArtist == "") mArtist = "Unknown";
+	//					if (mTitle == "") mTitle = "Unknown";
+	//					Log.d("TAG", mArtist + "  ************ " + mTitle + "********************** " + mAlbumurl);
+	                    initMediaSessionMetadata();
+						showPlayingNotification();
+					}
+				} catch (IOException e) {
+				    e.printStackTrace();
+				} catch (StringIndexOutOfBoundsException e) {
+				    e.printStackTrace();
 				}
-			} catch (IOException e) {
-			    e.printStackTrace();
-			} catch (StringIndexOutOfBoundsException e) {
-			    e.printStackTrace();
 			}
 		}
 	}
