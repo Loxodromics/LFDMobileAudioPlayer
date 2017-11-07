@@ -169,11 +169,13 @@
 		{
 			[songInfo setObject:title forKey:MPMediaItemPropertyTitle];
 			[songInfo setObject:m_iosAudioPlayer->media()->artist().toNSString() forKey:MPMediaItemPropertyArtist];
+			m_iosAudioPlayer->setTitle( QString::fromNSString(title) );
 		}
 		else
 		{
 			[songInfo setObject:m_iosAudioPlayer->media()->title().toNSString() forKey:MPMediaItemPropertyTitle];
 			[songInfo setObject:m_iosAudioPlayer->media()->artist().toNSString() forKey:MPMediaItemPropertyArtist];
+			m_iosAudioPlayer->setTitle("");
 		}
 		[songInfo setObject:m_iosAudioPlayer->media()->album().toNSString() forKey:MPMediaItemPropertyAlbumTitle];
 
@@ -287,7 +289,7 @@ void IosAudioPlayer::seekBackwardPressed()
 	emit seekBackward( this->media()->id() );
 }
 
-void IosAudioPlayer::setMedia(const AudioMedia* media)
+void IosAudioPlayer::setMedia(AudioMedia* media)
 {
 	AudioPlayer::setMedia(media);
 }

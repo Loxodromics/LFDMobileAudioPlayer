@@ -49,7 +49,7 @@ signals:
 	void seekBackward( QString mediaPath );
 
 public slots:
-	virtual void setMedia(const LFD::AudioMedia* media) override;
+	virtual void setMedia(LFD::AudioMedia* media) override;
 
 protected:
 	void* m_audioPlayerDelegate;
