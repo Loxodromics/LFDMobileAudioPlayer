@@ -32,7 +32,7 @@ void AndroidAudioPlayer::pause()
 	});
 }
 
-void AndroidAudioPlayer::setMedia(const AudioMedia* media)
+void AndroidAudioPlayer::setMedia(AudioMedia* media)
 {
 	AudioPlayer::setMedia(media);
 

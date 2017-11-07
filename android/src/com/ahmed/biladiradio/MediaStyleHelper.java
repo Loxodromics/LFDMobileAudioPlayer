@@ -19,12 +19,13 @@ public class MediaStyleHelper {
     /**
      * Build a notification using the information from the given media session. Makes heavy use
      * of {@link MediaMetadataCompat#getDescription()} to extract the appropriate information.
-     * @param context Context used to construct the notification.
+     *
+     * @param context      Context used to construct the notification.
      * @param mediaSession Media session to get information.
      * @return A pre-built notification with information from the given media session.
      */
     public static NotificationCompat.Builder from(
-            Context context, MediaSessionCompat mediaSession,String title,String content, Bitmap bm,String notification) {
+            Context context, MediaSessionCompat mediaSession, String title, String content, Bitmap bm, String notification) {
         MediaControllerCompat controller = mediaSession.getController();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder

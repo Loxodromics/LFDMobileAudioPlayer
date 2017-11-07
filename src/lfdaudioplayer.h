@@ -16,6 +16,7 @@ namespace LFD {
 class AudioPlayer : public QObject
 {
 	Q_OBJECT
+
 public:
 
 	enum class PlayingState : int
@@ -33,7 +34,7 @@ public:
 
 	Q_PROPERTY(bool playing READ playing NOTIFY playingChanged)
 	Q_PROPERTY(PlayingState playingState READ playingState NOTIFY playingStateChanged)
-//	Q_PROPERTY(QString mediaPath READ mediaPath WRITE setMediaPath NOTIFY mediaPathChanged)
+	Q_PROPERTY(QString title READ title NOTIFY titleChanged)
 
 	Q_INVOKABLE virtual void play() = 0;
 	Q_INVOKABLE virtual void pause() = 0;
@@ -41,10 +42,13 @@ public:
 
 	AudioPlayer::PlayingState playingState() const;
 
-	const AudioMedia* media() const;
+	AudioMedia* media() const;
+	QString title() const;
 
 public slots:
-	virtual void setMedia(const AudioMedia* media);
+	virtual void setMedia(AudioMedia* media);
+	void setMediaTitle(const QString title);
+	void setTitle(QString title);
 
 signals:
 	void playingChanged( bool playing );
@@ -53,14 +57,15 @@ signals:
 	void previousTrack( QString mediaPath );
 	void like( QString mediaPath );
 	void playingStateChanged( PlayingState playingState );
-	void mediaChanged( const AudioMedia* media );
+	void mediaChanged( AudioMedia* media );
+	void titleChanged(QString title);
 
 protected:
 	void setPlayingState( const PlayingState& playingState );
 
 	PlayingState m_playingState;
-	QString m_mediaPath;
-	const AudioMedia* m_media;
+	AudioMedia* m_media;
+	QString m_title;
 };
 
 } /// namespace LFD

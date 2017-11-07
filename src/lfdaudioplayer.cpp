@@ -14,7 +14,7 @@ namespace LFD {
 AudioPlayer::AudioPlayer(QObject* parent)
 	: QObject(parent),
 	  m_playingState(PlayingState::NotConnected),
-	  m_mediaPath("")
+	  m_title("")
 {
 	QString localImageUrl = qApp->applicationDirPath();
 	localImageUrl.append("/res/filtermusic-logo.jpg");
@@ -49,12 +49,17 @@ void AudioPlayer::setPlayingState(const PlayingState& playingState)
 	}
 }
 
-const AudioMedia* AudioPlayer::media() const
+AudioMedia* AudioPlayer::media() const
 {
 	return this->m_media;
 }
 
-void AudioPlayer::setMedia(const AudioMedia* media)
+QString AudioPlayer::title() const
+{
+	return this->m_title;
+}
+
+void AudioPlayer::setMedia(AudioMedia* media)
 {
 	if ( this->m_media != media )
 	{
@@ -62,6 +67,24 @@ void AudioPlayer::setMedia(const AudioMedia* media)
 		emit mediaChanged( this->media() );
 		this->m_media = media;
 	}
+}
+
+void AudioPlayer::setMediaTitle(const QString title)
+{
+	if ( this->m_media->title() != title )
+	{
+		this->m_media->setTitle( title );
+		emit mediaChanged( this->media() );
+	}
+}
+
+void AudioPlayer::setTitle(QString title)
+{
+	if (m_title == title)
+		return;
+
+	m_title = title;
+	emit titleChanged(m_title);
 }
 
 AudioPlayer::PlayingState AudioPlayer::playingState() const

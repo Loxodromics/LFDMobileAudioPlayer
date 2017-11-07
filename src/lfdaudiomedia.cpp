@@ -126,7 +126,10 @@ QString AudioMedia::title() const
 
 void AudioMedia::setTitle(const QString& title)
 {
-	m_title = title;
+	if (this->m_title != title)
+	{
+		this->m_title = title;
+	}
 }
 
 QString AudioMedia::artist() const

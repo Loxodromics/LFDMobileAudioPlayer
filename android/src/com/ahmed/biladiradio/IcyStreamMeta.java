@@ -41,7 +41,7 @@ public class IcyStreamMeta {
             String streamTitle = data.get("StreamTitle");
             String title = streamTitle.substring(0, streamTitle.indexOf("-"));
             return title.trim();
-        }catch (StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             return "";
         }
     }
@@ -60,11 +60,25 @@ public class IcyStreamMeta {
 
         try {
             String streamTitle = data.get("StreamTitle");
-            String artist = streamTitle.substring(streamTitle.indexOf("-")+1);
+            String artist = streamTitle.substring(streamTitle.indexOf("-") + 1);
             return artist.trim();
         } catch (StringIndexOutOfBoundsException e) {
             return "";
         }
+    }
+
+    /**
+     * Get the stream's title
+     *
+     * @return String
+     */
+    public String getStreamTitle() throws IOException {
+        Map<String, String> data = getMetadata();
+
+        if (!data.containsKey("StreamTitle"))
+            return "";
+
+        return data.get("StreamTitle");
     }
 
     public Map<String, String> getMetadata() throws IOException {
@@ -97,7 +111,7 @@ public class IcyStreamMeta {
             // Headers are sent within a stream
             StringBuilder strHeaders = new StringBuilder();
             char c;
-            while ((c = (char)stream.read()) != -1) {
+            while ((c = (char) stream.read()) != -1) {
                 strHeaders.append(c);
                 if (strHeaders.length() > 5 && (strHeaders.substring((strHeaders.length() - 4), strHeaders.length()).equals("\r\n\r\n"))) {
                     // end of headers
@@ -141,7 +155,7 @@ public class IcyStreamMeta {
             }
             if (inData) {
                 if (b != 0) {
-                    metaData.append((char)b);
+                    metaData.append((char) b);
                 }
             }
             if (count > (metaDataOffset + metaDataLength)) {
@@ -179,7 +193,7 @@ public class IcyStreamMeta {
         for (int i = 0; i < metaParts.length; i++) {
             m = p.matcher(metaParts[i]);
             if (m.find()) {
-                metadata.put((String)m.group(1), (String)m.group(2));
+                metadata.put((String) m.group(1), (String) m.group(2));
             }
         }
 

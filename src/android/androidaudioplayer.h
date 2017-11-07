@@ -35,16 +35,15 @@ public:
 	Q_INVOKABLE virtual void play() override;
 	Q_INVOKABLE virtual void pause() override;
 
-	virtual void setMedia(const AudioMedia* media) override;
+	virtual void setMedia(AudioMedia* media) override;
 	void setFocus(int focus);
 };
 
 } /// namespace LFD
 
 extern "C" {
-JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv *, jobject, jint);
-
-JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_StringReceiver(JNIEnv *var1, jobject var2, jstring string);
+JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv*, jobject, jint);
+JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_titleReporter(JNIEnv* env, jobject, jstring title);
 }
 
 #endif /// LFD_ANDROIDAUDIOPLAYER_H

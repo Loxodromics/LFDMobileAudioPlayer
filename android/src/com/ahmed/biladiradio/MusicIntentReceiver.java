@@ -26,7 +26,7 @@ public class MusicIntentReceiver extends BroadcastReceiver {
             KeyEvent keyEvent = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
             if (keyEvent.getAction() != KeyEvent.ACTION_DOWN)
                 return;
-            Intent i = new Intent("android.intent.action.MAIN").putExtra("state",keyEvent.getKeyCode());
+            Intent i = new Intent("android.intent.action.MAIN").putExtra("state", keyEvent.getKeyCode());
             context.sendBroadcast(i);
         }
     }
