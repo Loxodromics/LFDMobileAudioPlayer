@@ -39,20 +39,6 @@ bool AudioPlayer::playing() const
 	return (this->m_playingState == PlayingState::Playing);
 }
 
-QString AudioPlayer::mediaPath() const
-{
-	return this->m_mediaPath;
-}
-
-void AudioPlayer::setMediaPath(QString mediaPath)
-{
-	if ( this->m_mediaPath != mediaPath )
-	{
-		this->m_mediaPath = mediaPath;
-		emit mediaPathChanged( this->m_mediaPath );
-	}
-}
-
 void AudioPlayer::setPlayingState(const PlayingState& playingState)
 {
 	if ( this->m_playingState != playingState )

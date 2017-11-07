@@ -180,11 +180,11 @@
 		if ( !m_iosAudioPlayer->media()->localImageUrl().isEmpty() )
 		{
 			UIImage* albumArtImage = [UIImage imageWithContentsOfFile:m_iosAudioPlayer->media()->localImageUrl().toNSString()];
-            if (albumArtImage != nil)
-            {
-                MPMediaItemArtwork* albumArt = [[MPMediaItemArtwork alloc] initWithImage:albumArtImage];
-                [songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
-            }
+			if (albumArtImage != nil)
+			{
+				MPMediaItemArtwork* albumArt = [[MPMediaItemArtwork alloc] initWithImage:albumArtImage];
+				[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
+			}
 		}
 
 		[[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:songInfo];
@@ -240,12 +240,12 @@ void IosAudioPlayer::failedPlaying(QString errorMessage)
 
 void IosAudioPlayer::nextTrackPressed()
 {
-	emit nextTrack( this->mediaPath() );
+	emit nextTrack( this->media()->id() );
 }
 
 void IosAudioPlayer::previousTrackPressed()
 {
-	emit previousTrack( this->mediaPath() );
+	emit previousTrack( this->media()->id() );
 }
 
 void IosAudioPlayer::togglePlayPause()
@@ -269,22 +269,27 @@ void IosAudioPlayer::togglePlayPause()
 
 void IosAudioPlayer::likePressed()
 {
-	emit like( this->mediaPath() );
+	emit like( this->media()->id() );
 }
 
 void IosAudioPlayer::dislikePressed()
 {
-	emit dislike( this->mediaPath() );
+	emit dislike( this->media()->id() );
 }
 
 void IosAudioPlayer::seekForwardPressed()
 {
-	emit seekForward( this->mediaPath() );
+	emit seekForward( this->media()->id() );
 }
 
 void IosAudioPlayer::seekBackwardPressed()
 {
-	emit seekBackward( this->mediaPath() );
+	emit seekBackward( this->media()->id() );
+}
+
+void IosAudioPlayer::setMedia(const AudioMedia* media)
+{
+	AudioPlayer::setMedia(media);
 }
 
 } /// namespace LFD

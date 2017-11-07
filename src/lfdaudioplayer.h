@@ -33,20 +33,18 @@ public:
 
 	Q_PROPERTY(bool playing READ playing NOTIFY playingChanged)
 	Q_PROPERTY(PlayingState playingState READ playingState NOTIFY playingStateChanged)
-	Q_PROPERTY(QString mediaPath READ mediaPath WRITE setMediaPath NOTIFY mediaPathChanged)
+//	Q_PROPERTY(QString mediaPath READ mediaPath WRITE setMediaPath NOTIFY mediaPathChanged)
 
 	Q_INVOKABLE virtual void play() = 0;
 	Q_INVOKABLE virtual void pause() = 0;
 	Q_INVOKABLE virtual bool playing() const;
 
-	virtual QString mediaPath() const;
 	AudioPlayer::PlayingState playingState() const;
 
 	const AudioMedia* media() const;
-	virtual void setMedia(const AudioMedia* media);
 
 public slots:
-	virtual void setMediaPath( QString mediaPath );
+	virtual void setMedia(const AudioMedia* media);
 
 signals:
 	void playingChanged( bool playing );
