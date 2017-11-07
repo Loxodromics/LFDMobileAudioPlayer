@@ -7,25 +7,28 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-HEADERS += \
-    src/lfdaudioplayer.h \
-    src/lfdaudiomedia.h
+#INCLUDEPATH += \
+#    $$PWD/src
 
-SOURCES += src/main.cpp \
-    src/lfdaudioplayer.cpp \
-    src/lfdaudiomedia.cpp
+HEADERS += \
+    $$PWD/src/lfdaudioplayer.h \
+    $$PWD/src/lfdaudiomedia.h
+
+SOURCES += \
+    $$PWD/src/lfdaudioplayer.cpp \
+    $$PWD/src/lfdaudiomedia.cpp
 
 ios {
     QMAKE_CXXFLAGS += -fobjc-arc
 
     HEADERS += \
-        src/ios/LFDAudioPlayerConstants.h \
-        src/ios/LFDAudioPlayer.h \
-        src/ios/iosaudioplayer.h
+        $$PWD/src/ios/LFDAudioPlayerConstants.h \
+        $$PWD/src/ios/LFDAudioPlayer.h \
+        $$PWD/src/ios/iosaudioplayer.h
 
-    SOURCES += src/ios/LFDAudioPlayerConstants.mm \
-        src/ios/LFDAudioPlayer.mm \
-        src/ios/iosaudioplayer.mm
+    SOURCES += $$PWD/src/ios/LFDAudioPlayerConstants.mm \
+        $$PWD/src/ios/LFDAudioPlayer.mm \
+        $$PWD/src/ios/iosaudioplayer.mm
 
         LIBS += -framework AVFoundation -framework Foundation -framework MediaPlayer
 
@@ -35,15 +38,15 @@ android {
     QT += androidextras
 
     HEADERS += \
-        src/android/androidaudioplayer.h
+        $$PWD/src/android/androidaudioplayer.h
 
     SOURCES += \
-        src/android/androidaudioplayer.cpp
+        $$PWD/src/android/androidaudioplayer.cpp
 
     DISTFILES += \
-        android/src/com/ahmed/QAndroidResultReceiver/jniExport/jniExport.java \
-        android/src/com/ahmed/biladiradio/* \
-        android/AndroidManifest.xml
+        $$PWD/android/src/com/ahmed/QAndroidResultReceiver/jniExport/jniExport.java \
+        $$PWD/android/src/com/ahmed/biladiradio/* \
+        $$PWD/android/AndroidManifest.xml
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

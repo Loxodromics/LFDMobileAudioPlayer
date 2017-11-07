@@ -9,7 +9,7 @@
 #define LFD_AUDIOPLAYER_H
 
 #include <QObject>
-#include <src/lfdaudiomedia.h>
+#include "lfdaudiomedia.h"
 
 namespace LFD {
 

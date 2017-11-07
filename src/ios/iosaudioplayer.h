@@ -9,7 +9,7 @@
 #define LFD_IOSAUDIOPLAYER_H
 
 #include <QObject>
-#include "src/lfdaudioplayer.h"
+#include "../lfdaudioplayer.h"
 
 namespace LFD {
 
