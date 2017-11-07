@@ -8,8 +8,7 @@
 #ifndef LFD_ANDROIDAUDIOPLAYER_H
 #define LFD_ANDROIDAUDIOPLAYER_H
 
-#include "src/lfdaudioplayer.h"
-//#include <QMediaPlayer>
+#include "../lfdaudioplayer.h"
 #include <QtAndroid>
 
 #define AUDIOFOCUS_GAIN 1
