@@ -180,8 +180,11 @@
 		if ( !m_iosAudioPlayer->media()->localImageUrl().isEmpty() )
 		{
 			UIImage* albumArtImage = [UIImage imageWithContentsOfFile:m_iosAudioPlayer->media()->localImageUrl().toNSString()];
-			MPMediaItemArtwork* albumArt = [[MPMediaItemArtwork alloc] initWithImage:albumArtImage];
-			[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
+            if (albumArtImage != nil)
+            {
+                MPMediaItemArtwork* albumArt = [[MPMediaItemArtwork alloc] initWithImage:albumArtImage];
+                [songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
+            }
 		}
 
 		[[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:songInfo];
