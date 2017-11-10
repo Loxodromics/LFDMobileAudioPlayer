@@ -56,6 +56,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	private BroadcastReceiver Buttonreceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			try {
 			int state = intent.getIntExtra("state", -1);
 			int cmd = intent.getIntExtra("cmd", -1);
 			String url = intent.getStringExtra("url");
@@ -104,6 +105,13 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 				default:
 				    break;
 			}
+
+		}
+	    catch(Exception e) {
+			Log.d("BroadcastReceiver", "broadcast exception " + e.toString());
+//			Log.d("BroadcastReceiver", "broadcast exception " + e.printStackTrace());
+            e.printStackTrace();
+			}
 		}
 
 	};
@@ -136,10 +144,10 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 		if (mMediaPlayer.isPlaying()) {
 			mMediaPlayer.stop();
 //			mMediaPlayer.release();
-            stopMeta();
-			setMediaPlaybackState(PlaybackStateCompat.STATE_NONE);
-			showPausedNotification();
-		}
+        }
+	    stopMeta();
+		setMediaPlaybackState(PlaybackStateCompat.STATE_NONE);
+		showPausedNotification();
 	}
 
     public void playFunc() {
@@ -166,6 +174,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
     public void prepare(String url) {
 		Log.d("mMediaControllerCompat", "prepare(" + url + ")+++++++++++++++++++++++++++++++++");
+		stopFunc();
 		mURL = url;
 		playing_Prepared = false;
 		playing_Requested = false;
@@ -379,7 +388,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	@Override
 	public BrowserRoot onGetRoot(@NonNull String clientPackageName, int clientUid, @Nullable Bundle rootHints) {
 		if (TextUtils.equals(clientPackageName, getPackageName())) {
-			return new BrowserRoot("Simple Radio player", null);
+			return new BrowserRoot("filtermusic", null); //TODO set any name
 		}
 	    return null;
 	}
@@ -482,7 +491,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	    public void run() {
 			if (mMediaPlayer.isPlaying()) {
 				try {
-					Log.d("TAG", "        public void run() {");
+					Log.d("TAG", "        public void run(" + StationUrl + ") {");
 					icy = new IcyStreamMeta(new URL(StationUrl));
 					mArtist = icy.getArtist();
 					mTitle = icy.getTitle();
@@ -511,6 +520,10 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	}
 
     public void stopMeta() {
-		timer.cancel();
+		Log.d("TAG", "stopMeta");
+		icy = null;
+		if (timer != null)
+		    timer.cancel();
+		timer = null;
 	}
 }
