@@ -43,7 +43,7 @@ import com.ahmed.QAndroidResultReceiver.jniExport.jniExport;
 public class BackgroundAudioService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
 	public static final String COMMAND_EXAMPLE = "command_example";
-	private String mTitle = "Loading ...", mArtist = "", mAlbumurl = "", mURL = "", mNotification = "Android Player", mStreamTitle = "";
+	private String mTitle = "Loading ...", mArtist = "", mAlbumurl = "", mURL = "", mNotification = "filtermusic", mStreamTitle = "";
 
 	private Bitmap mAlbumBitMap = null;
 	private MediaPlayer mMediaPlayer;
@@ -489,8 +489,9 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 		}
 
 	    public void run() {
-			if (mMediaPlayer.isPlaying()) {
-				try {
+			try {
+				if (mMediaPlayer.isPlaying()) {
+
 					Log.d("TAG", "        public void run(" + StationUrl + ") {");
 					icy = new IcyStreamMeta(new URL(StationUrl));
 					mArtist = icy.getArtist();
@@ -510,11 +511,11 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	                    initMediaSessionMetadata();
 						showPlayingNotification();
 					}
-				} catch (IOException e) {
-				    e.printStackTrace();
-				} catch (StringIndexOutOfBoundsException e) {
-				    e.printStackTrace();
 				}
+			} catch (IOException e) {
+			    e.printStackTrace();
+			} catch (StringIndexOutOfBoundsException e) {
+			    e.printStackTrace();
 			}
 		}
 	}
