@@ -35,7 +35,7 @@ public:
 	Q_INVOKABLE virtual void play() override;
 	Q_INVOKABLE virtual void pause() override;
 
-	virtual void setMedia(AudioMedia* media) override;
+	virtual void setMedia(LFD::AudioMedia* media) override;
 	void setFocus(int focus);
 };
 

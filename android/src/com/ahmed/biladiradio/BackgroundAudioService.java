@@ -124,8 +124,20 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 		Log.d("mMediaControllerCompat", "pauseFunc()+++++++++++++++++++++++++++++++++");
 		if (mMediaPlayer.isPlaying()) {
 			mMediaPlayer.pause();
+
 			stopMeta();
 			setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+			showPausedNotification();
+		}
+	}
+
+    public void stopFunc() {
+		Log.d("mMediaControllerCompat", "stopFunc()+++++++++++++++++++++++++++++++++");
+		if (mMediaPlayer.isPlaying()) {
+			mMediaPlayer.stop();
+//			mMediaPlayer.release();
+            stopMeta();
+			setMediaPlaybackState(PlaybackStateCompat.STATE_NONE);
 			showPausedNotification();
 		}
 	}
@@ -133,38 +145,41 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
     public void playFunc() {
 		Log.d("mMediaControllerCompat", "playFunc()+++++++++++++++++++++++++++++++++");
 		getMeta(mURL);
-		if (!successfullyRetrievedAudioFocus()) {
-			return;
+//		if (!successfullyRetrievedAudioFocus()) {
+//			return;
+//		}
+
+        if (playing_Prepared)
+		{
+			Log.d("mMediaControllerCompat", "playing_Prepared");
+			mMediaPlayer.start();
+			mMediaSessionCompat.setActive(true);
+			setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+			showPlayingNotification();
 		}
-
-	    mMediaSessionCompat.setActive(true);
-		setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
-		showPlayingNotification();
-
-		if (playing_Prepared)
-		    mMediaPlayer.start();
-		else
-		    playing_Requested = true;
+	    else {
+			Log.d("mMediaControllerCompat", "!playing_Prepared");
+			prepare(mURL);
+			playing_Requested = true;
+		}
 	}
 
     public void prepare(String url) {
+		Log.d("mMediaControllerCompat", "prepare(" + url + ")+++++++++++++++++++++++++++++++++");
 		mURL = url;
+		playing_Prepared = false;
+		playing_Requested = false;
 		try {
-			try {
-				mMediaPlayer.setDataSource(url);
-			} catch (IllegalStateException e) {
-			    mMediaPlayer.release();
-				initMediaPlayer();
-				mMediaPlayer.setDataSource(url);
-			}
-		    initMediaSessionMetadata();
+//			mMediaPlayer.stop();
+            mMediaPlayer.reset();
+			mMediaPlayer.setDataSource(url);
+			initMediaSessionMetadata();
 		} catch (IOException e) {
-		    return;
+		    Log.d("mMediaControllerCompat", "prepare()++++++++++ something went wrong");
+			return;
 		}
-	    // try{ mMediaPlayer.prepare();
-		// }catch (IOException e){}
+
 	    mMediaPlayer.prepareAsync();
-		//mMediaPlayer.start();
 	}
 
     public void setnotification(String txt) {
@@ -176,8 +191,15 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	}
 
     public void onPrepared(MediaPlayer player) {
-		mMediaPlayer.start();
-	}
+		Log.d("mMediaControllerCompat", "onPrepared(mMediaControllerCompat)+++++++++++++++++++++++++++++++++");
+		playing_Prepared = true;
+
+		if (playing_Requested) {
+			Log.d("mMediaControllerCompat", "onPrepared(mMediaControllerCompat)++++playing_Requested");
+			playFunc();
+		}
+//		mMediaPlayer.start();
+    }
 
     private MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback() {
 
@@ -260,8 +282,10 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 				playing_Prepared = true;
 				Log.d("mPlayer", "onPrepared()+++++++++++++++++++++++++++++++++");
 
-				if (playing_Requested)
-				    mp.start();
+				if (playing_Requested) {
+					Log.d("mPlayer", "onPrepared()++++playing_Requested");
+					playFunc();
+				}
 			}
 		});
 	    mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);

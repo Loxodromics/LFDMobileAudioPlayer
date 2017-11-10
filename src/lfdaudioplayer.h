@@ -46,7 +46,7 @@ public:
 	QString title() const;
 
 public slots:
-	virtual void setMedia(AudioMedia* media);
+	virtual void setMedia(LFD::AudioMedia* media);
 	void setMediaTitle(const QString title);
 	void setTitle(QString title);
 
