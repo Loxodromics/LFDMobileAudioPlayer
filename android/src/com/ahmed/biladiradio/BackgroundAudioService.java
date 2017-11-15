@@ -66,8 +66,10 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 			if (cmd == 1) {
 				playFunc();
 			} else if (cmd == 0) {
-			    pauseFunc();
-			}
+			    Log.d("mMediaControllerCompat", "cmd pause/stop");
+				stopFunc();
+//			    pauseFunc();
+            }
 
 		    if (cmd == -1 && state == -1) {
 				if (url != null) {
@@ -85,7 +87,9 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
 				    Log.d("mMediaControllerCompat", "++++++++++++KEYCODE_MEDIA_PLAY_PAUSE");
 					if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-						pauseFunc();
+//						pauseFunc();
+                        Log.d("mMediaControllerCompat", "KEYCODE_MEDIA_PLAY_PAUSE");
+						stopFunc();
 					} else {
 					    playFunc();
 					}
@@ -122,6 +126,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 			Log.d("BroadcastReceiver", " public void onReceive(Context context, Intent intent+");
 
 			if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+				/// what is this?
 				Log.d("BroadcastReceiver", "  mMediaPlayer != null && mMediaPlayer.isPlaying() ");
 				pauseFunc();
 			}
@@ -402,12 +407,14 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	public void onAudioFocusChange(int focusChange) {
 		switch (focusChange) {
 			case AudioManager.AUDIOFOCUS_LOSS: {
+				Log.d("mPlayer", "AudioManager.AUDIOFOCUS_LOSS");
 				if (mMediaPlayer.isPlaying()) {
 					pauseFunc();
 				}
 			    break;
 			}
 		    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT: {
+				Log.d("mPlayer", "AudioManager.AUDIOFOCUS_LOSS_TRANSIENT");
 				pauseFunc();
 				break;
 			}
