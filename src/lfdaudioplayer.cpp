@@ -14,24 +14,25 @@ namespace LFD {
 AudioPlayer::AudioPlayer(QObject* parent)
 	: QObject(parent),
 	  m_playingState(PlayingState::NotConnected),
+	  m_media(),
 	  m_title("")
 {
-	QString localImageUrl = qApp->applicationDirPath();
-	localImageUrl.append("/res/filtermusic-logo.jpg");
-	qDebug() << "localImageUrl" << localImageUrl;
-	this->m_media = new AudioMedia(this,
-								   false,
-								   false,
-								   true,
-								   false,
-								   true,
-								   false,
-								   "54321!",
-								   "Titel",
-								   "Artitst",
-								   "LFD Audio Player",
-								   localImageUrl,
-								   "http://ice1.somafm.com/groovesalad-128-mp3" );
+//	QString localImageUrl = qApp->applicationDirPath();
+//	localImageUrl.append("/res/filtermusic-logo.jpg");
+//	qDebug() << "localImageUrl" << localImageUrl;
+//	this->m_media = new AudioMedia(this,
+//								   false,
+//								   false,
+//								   true,
+//								   false,
+//								   true,
+//								   false,
+//								   "54321!",
+//								   "Titel",
+//								   "Artitst",
+//								   "LFD Audio Player",
+//								   localImageUrl,
+//								   "http://ice1.somafm.com/groovesalad-128-mp3" );
 }
 
 void AudioPlayer::play()

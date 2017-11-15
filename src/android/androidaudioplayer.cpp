@@ -15,19 +15,23 @@ AndroidAudioPlayer::AndroidAudioPlayer(QObject* parent)
 	: AudioPlayer(parent)
 {
 	/// for testing
-	this->setMedia(this->media());
+//	this->setMedia(this->media());
 }
 
 void AndroidAudioPlayer::play()
 {
-	this->setPlayingState(PlayingState::Connecting);
-	QtAndroid::runOnAndroidThread([] {
-		QtAndroid::androidActivity().callMethod<void>("playstation");
-	});
+	if ( this->media() != nullptr )
+	{
+		this->setPlayingState(PlayingState::Connecting);
+		QtAndroid::runOnAndroidThread([] {
+			QtAndroid::androidActivity().callMethod<void>("playstation");
+		});
+	}
 }
 
 void AndroidAudioPlayer::pause()
 {
+//	this->setPlayingState(PlayingState::NotConnected);
 	QtAndroid::runOnAndroidThread([] {
 		QtAndroid::androidActivity().callMethod<void>("pausestation");
 	});
