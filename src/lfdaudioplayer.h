@@ -36,8 +36,8 @@ public:
 	Q_PROPERTY(PlayingState playingState READ playingState NOTIFY playingStateChanged)
 	Q_PROPERTY(QString title READ title NOTIFY titleChanged)
 
-	Q_INVOKABLE virtual void play() = 0;
-	Q_INVOKABLE virtual void pause() = 0;
+	Q_INVOKABLE virtual void play();
+	Q_INVOKABLE virtual void pause();
 	Q_INVOKABLE virtual bool playing() const;
 
 	AudioPlayer::PlayingState playingState() const;

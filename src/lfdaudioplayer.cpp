@@ -34,6 +34,16 @@ AudioPlayer::AudioPlayer(QObject* parent)
 								   "http://ice1.somafm.com/groovesalad-128-mp3" );
 }
 
+void AudioPlayer::play()
+{
+
+}
+
+void AudioPlayer::pause()
+{
+
+}
+
 bool AudioPlayer::playing() const
 {
 	return (this->m_playingState == PlayingState::Playing);

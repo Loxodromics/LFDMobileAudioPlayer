@@ -20,6 +20,7 @@ AndroidAudioPlayer::AndroidAudioPlayer(QObject* parent)
 
 void AndroidAudioPlayer::play()
 {
+	this->setPlayingState(PlayingState::Connecting);
 	QtAndroid::runOnAndroidThread([] {
 		QtAndroid::androidActivity().callMethod<void>("playstation");
 	});
