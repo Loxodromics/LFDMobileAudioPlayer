@@ -25,12 +25,14 @@ public:
 
 	enum class FocusState : int
 	{
-		Playing = 0,
-		Paused = 1
+		Paused = 0,
+		Playing = 1,
+		Stopped = 2
 	};
 
 	explicit AndroidAudioPlayer( QObject* parent = nullptr );
 
+public slots:
 	/// AudioPlayer override
 	Q_INVOKABLE virtual void play() override;
 	Q_INVOKABLE virtual void pause() override;

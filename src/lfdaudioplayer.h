@@ -58,7 +58,9 @@ signals:
 	void like( QString mediaPath );
 	void playingStateChanged( PlayingState playingState );
 	void mediaChanged( AudioMedia* media );
-	void titleChanged(QString title);
+	void titleChanged( QString title );
+	void playPressed();
+	void pausePressed();
 
 protected:
 	void setPlayingState( const PlayingState& playingState );

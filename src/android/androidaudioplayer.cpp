@@ -14,12 +14,16 @@ namespace LFD
 AndroidAudioPlayer::AndroidAudioPlayer(QObject* parent)
 	: AudioPlayer(parent)
 {
-	/// for testing
-//	this->setMedia(this->media());
+	connect( this, SIGNAL( playPressed() ),
+			 this, SLOT( play() ) );
+
+	connect( this, SIGNAL( pausePressed() ),
+			 this, SLOT( pause() ) );
 }
 
 void AndroidAudioPlayer::play()
 {
+	qDebug() << "AndroidAudioPlayer::play()";
 	if ( this->media() != nullptr )
 	{
 		this->setPlayingState(PlayingState::Connecting);
@@ -31,6 +35,7 @@ void AndroidAudioPlayer::play()
 
 void AndroidAudioPlayer::pause()
 {
+	qDebug() << "AndroidAudioPlayer::pause()";
 //	this->setPlayingState(PlayingState::NotConnected);
 	QtAndroid::runOnAndroidThread([] {
 		QtAndroid::androidActivity().callMethod<void>("pausestation");
@@ -58,6 +63,9 @@ void AndroidAudioPlayer::setFocus(int focus)
 		break;
 	case FocusState::Playing:
 		this->setPlayingState( PlayingState::Playing );
+		break;
+	case FocusState::Stopped:
+		this->setPlayingState( PlayingState::NotConnected );
 		break;
 	default:
 		qDebug() << "unknow FocusState:" << focus;

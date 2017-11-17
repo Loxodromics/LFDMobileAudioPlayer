@@ -37,16 +37,19 @@ AudioPlayer::AudioPlayer(QObject* parent)
 
 void AudioPlayer::play()
 {
-
+	qDebug() << "AudioPlayer::play()";
+	emit playPressed();
 }
 
 void AudioPlayer::pause()
 {
-
+	qDebug() << "AudioPlayer::pause()";
+	emit pausePressed();
 }
 
 bool AudioPlayer::playing() const
 {
+	qDebug() << "this->m_playingState" << (int)this->m_playingState;
 	return (this->m_playingState == PlayingState::Playing);
 }
 
@@ -72,6 +75,8 @@ QString AudioPlayer::title() const
 
 void AudioPlayer::setMedia(AudioMedia* media)
 {
+	qDebug() << "AudioPlayer::setMedia";
+
 	if ( this->m_media != media )
 	{
 		this->pause();

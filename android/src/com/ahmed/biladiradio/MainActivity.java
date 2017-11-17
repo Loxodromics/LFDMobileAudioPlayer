@@ -20,6 +20,7 @@ import com.ahmed.QAndroidResultReceiver.jniExport.jniExport;
 public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity {
 	private static final int STATE_PAUSED = 0;
 	private static final int STATE_PLAYING = 1;
+	private static final int STATE_STOPPED = 2;
 	private static jniExport m_jniExport;
 
 	private int mCurrentState;
@@ -52,15 +53,16 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 		sendBroadcast(i);
 		}
 
-	public void togglestate() {
-		if (mCurrentState == STATE_PAUSED) {
-			playstation();
-			mCurrentState = STATE_PLAYING;
-			} else {
-			pausestation();
-			mCurrentState = STATE_PAUSED;
-			}
-	}
+//	public void togglestate() {
+//		if ( (mCurrentState == STATE_PAUSED) ||
+//		     (mCurrentState == STATE_PAUSED) ) {
+//			playstation();
+//			mCurrentState = STATE_PLAYING;
+//		} else {
+//			pausestation();
+//			mCurrentState = STATE_PAUSED;
+//		}
+//	}
 
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,22 +100,32 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 			super.onPlaybackStateChanged(state);
 			if (state == null) {
 				return;
-				}
+			}
+		    Log.d("mMediaControllerCompat", "state: " + state);
 			switch (state.getState()) {
 				case PlaybackStateCompat.STATE_PLAYING: {
 					mCurrentState = STATE_PLAYING;
-					m_jniExport.intMethod(0);
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PLAYING;");
 					break;
-					}
-				case PlaybackStateCompat.STATE_PAUSED: {
+				}
+			    case PlaybackStateCompat.STATE_PAUSED: {
 					mCurrentState = STATE_PAUSED;
-					m_jniExport.intMethod(1);
 					m_jniExport.titleReporter("");
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PAUSED;");
 					break;
-					}
+				}
+			    case PlaybackStateCompat.STATE_NONE: {
+					mCurrentState = STATE_STOPPED;
+					m_jniExport.titleReporter("");
+					Log.d("mMediaControllerCompat", "mCurrentState = STATE_STOPPED;");
+					break;
+				}
+			    default: {
+					Log.d("mMediaControllerCompat", "ccccc unknown state");
+					break;
+				}
 			}
+		    m_jniExport.intMethod(mCurrentState);
 		}
 	};
 }
