@@ -315,21 +315,22 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 		if (builder == null) {
 			return;
 		}
-	    builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Pause", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PAUSE)));
+	    builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Stop", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PAUSE)));
 		builder.setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0).setMediaSession(mMediaSessionCompat.getSessionToken()));
 		builder.setSmallIcon(R.mipmap.ic_launcher);
 		NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
 	}
 
     private void showPausedNotification() {
-		NotificationCompat.Builder builder = MediaStyleHelper.from(BackgroundAudioService.this, mMediaSessionCompat, mArtist, mTitle, mAlbumBitMap, mNotification);
-		if (builder == null) {
-			return;
-		}
-	    builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_play, "Play", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY)));
-		builder.setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0).setMediaSession(mMediaSessionCompat.getSessionToken()));
-		builder.setSmallIcon(R.mipmap.ic_launcher);
-		NotificationManagerCompat.from(this).notify(1, builder.build());
+//		NotificationCompat.Builder builder = MediaStyleHelper.from(BackgroundAudioService.this, mMediaSessionCompat, mArtist, mTitle, mAlbumBitMap, mNotification);
+//		if (builder == null) {
+//			return;
+//		}
+//	    builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_play, "Play", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY)));
+//		builder.setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0).setMediaSession(mMediaSessionCompat.getSessionToken()));
+//		builder.setSmallIcon(R.mipmap.ic_launcher);
+//		NotificationManagerCompat.from(this).notify(1, builder.build());
+        NotificationManagerCompat.from(this).cancelAll();
 	}
 
     private void initMediaSession() {
@@ -497,7 +498,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
 	    public void run() {
 			try {
-				if (mMediaPlayer.isPlaying()) {
+				if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
 
 					Log.d("TAG", "        public void run(" + StationUrl + ") {");
 					icy = new IcyStreamMeta(new URL(StationUrl));
@@ -523,6 +524,9 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 			    e.printStackTrace();
 			} catch (StringIndexOutOfBoundsException e) {
 			    e.printStackTrace();
+			}
+			catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
