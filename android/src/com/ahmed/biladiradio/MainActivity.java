@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.media.session.MediaController;
 import android.app.Activity;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+import com.crashlytics.android.ndk.CrashlyticsNdk;
 
 import com.ahmed.QAndroidResultReceiver.jniExport.jniExport;
 
@@ -69,6 +72,7 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 		mMediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, BackgroundAudioService.class),
 		        mMediaBrowserCompatConnectionCallback, getIntent().getExtras());
 				mMediaBrowserCompat.connect();
+		Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 		}
 
 	private MediaBrowserCompat mMediaBrowserCompat;
