@@ -318,6 +318,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 	    builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Stop", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PAUSE)));
 		builder.setStyle(new NotificationCompat.MediaStyle().setShowActionsInCompactView(0).setMediaSession(mMediaSessionCompat.getSessionToken()));
 		builder.setSmallIcon(R.mipmap.ic_launcher);
+		builder.setOngoing(true);
 		NotificationManagerCompat.from(BackgroundAudioService.this).notify(1, builder.build());
 	}
 
