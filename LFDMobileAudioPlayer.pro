@@ -59,8 +59,8 @@ android {
         src/android/androidaudioplayer.cpp
 
     DISTFILES += \
-        android/src/com/ahmed/QAndroidResultReceiver/jniExport/jniExport.java \
-        android/src/com/ahmed/biladiradio/* \
+        android/src/net/quatur/QAndroidResultReceiver/jniExport/jniExport.java \
+        android/src/net/quatur/filtermusicQt/* \
         android/AndroidManifest.xml
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

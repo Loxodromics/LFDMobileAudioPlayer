@@ -1,24 +1,20 @@
-package com.ahmed.biladiradio;
+package net.quatur.filtermusicQt;
 
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.media.session.MediaController;
-import android.app.Activity;
+
+import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
 import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 
-import com.ahmed.QAndroidResultReceiver.jniExport.jniExport;
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity {
 	private static final int STATE_PAUSED = 0;

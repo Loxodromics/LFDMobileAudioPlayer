@@ -1,4 +1,4 @@
-package com.ahmed.biladiradio;
+package net.quatur.filtermusicQt;
 
 import android.content.Context;
 import android.graphics.Bitmap;

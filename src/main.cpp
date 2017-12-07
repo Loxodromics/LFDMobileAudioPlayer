@@ -21,18 +21,18 @@ LFD::AndroidAudioPlayer* audioPlayer;
 
 #ifdef Q_OS_ANDROID
 
-JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv*, jobject, jint focusChange)
+JNIEXPORT jint JNICALL Java_net_quatur_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv*, jobject, jint focusChange)
 {
 	/// TODO
 //	static int lastfocus = 0;
 //	rootObject->setProperty("command", focusChange);
-	qDebug() << "yyy_Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod " << focusChange;
+	qDebug() << "yyy_Java_net_quatur_QAndroidResultReceiver_jniExport_jniExport_intMethod " << focusChange;
 	audioPlayer->setFocus(focusChange);
 
 	return 1;
 }
 
-JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_StringReceiver(JNIEnv *env, jobject var2, jstring string)
+JNIEXPORT jint JNICALL Java_net_quatur_QAndroidResultReceiver_jniExport_jniExport_StringReceiver(JNIEnv *env, jobject var2, jstring string)
 {
 	Q_UNUSED(env);
 	Q_UNUSED(var2);

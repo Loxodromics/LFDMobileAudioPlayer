@@ -1,4 +1,4 @@
-package com.ahmed.biladiradio;
+package net.quatur.filtermusicQt;
 
 import java.io.IOException;
 import java.io.InputStream;

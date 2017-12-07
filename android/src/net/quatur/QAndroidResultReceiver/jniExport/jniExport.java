@@ -1,4 +1,4 @@
-package com.ahmed.QAndroidResultReceiver.jniExport;
+package net.quatur.QAndroidResultReceiver.jniExport;
 
 /**
  * Created by ahmed on 07/11/2016.

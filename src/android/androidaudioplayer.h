@@ -44,8 +44,8 @@ public slots:
 } /// namespace LFD
 
 extern "C" {
-JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv*, jobject, jint);
-JNIEXPORT jint JNICALL Java_com_ahmed_QAndroidResultReceiver_jniExport_jniExport_titleReporter(JNIEnv* env, jobject, jstring title);
+JNIEXPORT jint JNICALL Java_net_quatur_QAndroidResultReceiver_jniExport_jniExport_intMethod(JNIEnv*, jobject, jint);
+JNIEXPORT jint JNICALL Java_net_quatur_QAndroidResultReceiver_jniExport_jniExport_titleReporter(JNIEnv* env, jobject, jstring title);
 }
 
 #endif /// LFD_ANDROIDAUDIOPLAYER_H

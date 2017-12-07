@@ -1,4 +1,4 @@
-package com.ahmed.biladiradio;
+package net.quatur.filtermusicQt;
 
 import android.app.Notification;
 import android.app.NotificationManager;

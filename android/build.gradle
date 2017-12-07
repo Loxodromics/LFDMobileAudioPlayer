@@ -29,7 +29,7 @@ repositories {
 
 crashlytics {
     enableNdk true
-	androidNdkOut 'libs'
+	androidNdkOut '..'
 	androidNdkLibsOut 'libs'
 }
 

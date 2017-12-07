@@ -1,4 +1,4 @@
-package com.ahmed.biladiradio;
+package net.quatur.filtermusicQt;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -38,7 +38,7 @@ import de.umass.lastfm.Album;
 import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
 
-import com.ahmed.QAndroidResultReceiver.jniExport.jniExport;
+import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
 
 public class BackgroundAudioService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
