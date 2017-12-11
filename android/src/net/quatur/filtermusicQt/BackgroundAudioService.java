@@ -507,7 +507,8 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 					mTitle = icy.getTitle();
 					mStreamTitle = icy.getStreamTitle();
 
-					m_jniExport.titleReporter(mStreamTitle);
+//					m_jniExport.titleReporter(mStreamTitle);
+//					m_jniExport.sendSetTitle(mStreamTitle);
 
 					Log.d("TAG", mArtist + "  ************ " + mTitle);
 					if (current_song != mTitle) {

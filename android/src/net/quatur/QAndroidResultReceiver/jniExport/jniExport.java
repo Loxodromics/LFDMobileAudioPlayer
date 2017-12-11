@@ -7,8 +7,10 @@ package net.quatur.QAndroidResultReceiver.jniExport;
 
 public class jniExport {
 	public static native int intMethod(int n);
+    public static native void sendSetFocus(int n);
 //	public native int StringReceiver(String n);
 //	public void intMethod(String n){};
     public static native int titleReporter(String title);
+    public static native void sendSetTitle(String title);
 }
 

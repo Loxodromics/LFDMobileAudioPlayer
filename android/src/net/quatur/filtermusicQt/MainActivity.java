@@ -110,13 +110,15 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 				}
 			    case PlaybackStateCompat.STATE_PAUSED: {
 					mCurrentState = STATE_PAUSED;
-					m_jniExport.titleReporter("");
+//					m_jniExport.titleReporter("");
+					m_jniExport.sendSetTitle("");
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PAUSED;");
 					break;
 				}
 			    case PlaybackStateCompat.STATE_NONE: {
 					mCurrentState = STATE_STOPPED;
-					m_jniExport.titleReporter("");
+//					m_jniExport.titleReporter("");
+					m_jniExport.sendSetTitle("");
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_STOPPED;");
 					break;
 				}
@@ -125,7 +127,8 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 					break;
 				}
 			}
-		    m_jniExport.intMethod(mCurrentState);
+//		    m_jniExport.intMethod(mCurrentState);
+			m_jniExport.sendSetFocus(mCurrentState);
 		}
 	};
 }

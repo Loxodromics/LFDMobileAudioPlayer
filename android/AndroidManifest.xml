@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="net.quatur.filtermusicQt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.1.0" android:versionCode="110" android:installLocation="auto">
+<manifest package="net.quatur.filtermusicQt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.1.1" android:versionCode="111" android:installLocation="auto">
     <application android:icon="@drawable/icon" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="@string/app_name">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="net.quatur.filtermusicQt.MainActivity" android:label="filtermusic" android:screenOrientation="unspecified">
             <intent-filter>
@@ -37,11 +37,18 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
         </receiver>
-        <service android:name=".BackgroundAudioService">
+        <service android:name=".BackgroundAudioService" android:process=":AudioBackgroundProcess">
+            <!-- Application arguments -->
+            <meta-data android:name="android.app.arguments" android:value="-service"/>
+            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+            <!-- Application arguments -->
             <intent-filter>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
+            <!-- Background running -->
+            <meta-data android:name="android.app.background_running" android:value="true"/>
+            <!-- Background running -->
         </service>
     </application>
     <uses-sdk android:minSdkVersion="16"/>
