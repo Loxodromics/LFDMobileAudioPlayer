@@ -8,11 +8,11 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-import android.widget.Button;
 
-import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
+
+import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -23,7 +23,34 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 	private static jniExport m_jniExport;
 
 	private int mCurrentState;
-	private Button mPlayPauseToggleButton;
+
+    private BackgroundBroadcastReceiver titleBroadcastReceiver = new BackgroundBroadcastReceiver() {
+
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            super.onReceive(context, intent);
+//            Log.d("mMediaControllerCompat", "onReceive");
+//            try {
+//                Bundle extra = intent.getExtras();
+//                String title = extra.getString("title");
+//                Log.d("mMediaControllerCompat", "title: " + title);
+//                if (title != "")
+//                    m_jniExport.sendSetTitle("jo" + title);
+//            }
+//            catch(Exception e) {
+//                Log.d("BroadcastReceiver", "broadcast exception " + e.toString());
+////			Log.d("BroadcastReceiver", "broadcast exception " + e.printStackTrace());
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        @Override
+//        public void gotTitle(String title) {
+//            Log.d("mMediaControllerCompat", "gotTitle2: " + title);
+//            if (title != "")
+//                m_jniExport.sendSetTitle("jo" + title);
+//        };
+    };
 
 	public void onDestroy() {
 		super.onDestroy();
@@ -69,6 +96,7 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 		        mMediaBrowserCompatConnectionCallback, getIntent().getExtras());
 				mMediaBrowserCompat.connect();
 		Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+        titleBroadcastReceiver.m_jniExport = m_jniExport;
 		}
 
 	private MediaBrowserCompat mMediaBrowserCompat;
@@ -110,14 +138,12 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 				}
 			    case PlaybackStateCompat.STATE_PAUSED: {
 					mCurrentState = STATE_PAUSED;
-//					m_jniExport.titleReporter("");
 					m_jniExport.sendSetTitle("");
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PAUSED;");
 					break;
 				}
 			    case PlaybackStateCompat.STATE_NONE: {
 					mCurrentState = STATE_STOPPED;
-//					m_jniExport.titleReporter("");
 					m_jniExport.sendSetTitle("");
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_STOPPED;");
 					break;
@@ -127,7 +153,6 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 					break;
 				}
 			}
-//		    m_jniExport.intMethod(mCurrentState);
 			m_jniExport.sendSetFocus(mCurrentState);
 		}
 	};

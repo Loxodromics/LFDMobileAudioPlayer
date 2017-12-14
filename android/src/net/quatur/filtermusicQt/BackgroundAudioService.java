@@ -28,6 +28,8 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 
+import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -37,8 +39,6 @@ import java.util.TimerTask;
 import de.umass.lastfm.Album;
 import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
-
-import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
 
 public class BackgroundAudioService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
@@ -285,6 +285,11 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 		NotificationManagerCompat.from(this).cancel(1);
 	}
 
+    private void sendMsg(String messageType, String message) {
+        Intent i = new Intent("net.quatur.filtermusicQt.intent.TITLE").putExtra(messageType, message);
+        sendBroadcast(i);
+    }
+
     public boolean playing_Requested = false;
 	public boolean playing_Prepared = false;
 
@@ -509,6 +514,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat implements
 
 //					m_jniExport.titleReporter(mStreamTitle);
 //					m_jniExport.sendSetTitle(mStreamTitle);
+                    sendMsg("title", mStreamTitle);
 
 					Log.d("TAG", mArtist + "  ************ " + mTitle);
 					if (current_song != mTitle) {

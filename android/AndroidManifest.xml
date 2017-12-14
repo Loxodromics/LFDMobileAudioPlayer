@@ -32,6 +32,11 @@
             -->
             <!-- Splash screen -->
         </activity>
+        <receiver android:name=".BackgroundBroadcastReceiver" >
+             <intent-filter>
+                 <action android:name="net.quatur.filtermusicQt.intent.TITLE" />
+             </intent-filter>
+        </receiver>
         <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>

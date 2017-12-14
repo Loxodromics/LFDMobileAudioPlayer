@@ -51,3 +51,6 @@ android {
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 } # android
+
+DISTFILES += \
+    $$PWD/android/src/net/quatur/filtermusicQt/BackgroundBroadcastReceiver.java
