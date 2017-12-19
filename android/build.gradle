@@ -86,8 +86,8 @@ android {
     defaultConfig {
 	    minSdkVersion 17
 		targetSdkVersion 26
-		versionCode 1
-		versionName "1.0"
+		versionCode 121
+		versionName "1.2.1"
 		ndk {
 		    // Tells Gradle to build outputs for the following ABIs and package them into your APK.
 			abiFilters 'x86', 'armeabi-v7a'
