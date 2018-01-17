@@ -83,7 +83,7 @@ public class MediaBrowserAdapter {
 			mMediaBrowser =
 			        new MediaBrowserCompat(
 					        mContext,
-							null, //new ComponentName(mContext, MusicService.class),
+							new ComponentName(mContext, MusicService.class),
 							mMediaBrowserConnectionCallback,
 							null);
 							mMediaBrowser.connect();

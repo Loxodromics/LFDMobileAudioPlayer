@@ -46,6 +46,8 @@ android {
     DISTFILES += \
         $$PWD/android/src/net/quatur/QAndroidResultReceiver/jniExport/jniExport.java \
         $$PWD/android/src/net/quatur/filtermusicQt/* \
+        $$PWD/android/src/net/quatur/filtermusicQt/notifications/* \
+        $$PWD/android/src/net/quatur/filtermusicQt/players/* \
         $$PWD/android/AndroidManifest.xml
 
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

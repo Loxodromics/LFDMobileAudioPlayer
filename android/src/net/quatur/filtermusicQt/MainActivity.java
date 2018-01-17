@@ -38,8 +38,8 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 		Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
 
 		mMediaBrowserAdapter = new MediaBrowserAdapter(this);
-//		mMediaBrowserAdapter.addListener(new MediaBrowserListener());
-    }
+		mMediaBrowserAdapter.addListener(new MediaBrowserListener());
+	}
 
     @Override
 	public void onStart() {
