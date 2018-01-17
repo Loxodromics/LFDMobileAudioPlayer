@@ -1,115 +1,129 @@
 package net.quatur.filtermusicQt;
 
-import android.content.ComponentName;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 
 import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
-import net.quatur.filtermusicQt.R;
-import net.quatur.filtermusicQt.MediaBrowserAdapter;
 
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity {
-	private static final int STATE_PAUSED = 0;
-	private static final int STATE_PLAYING = 1;
-	private static final int STATE_STOPPED = 2;
-	private static jniExport m_jniExport;
+    private static final int STATE_PAUSED = 0;
+    private static final int STATE_PLAYING = 1;
+    private static final int STATE_STOPPED = 2;
+    private static jniExport m_jniExport;
 
-	private MediaBrowserAdapter mMediaBrowserAdapter;
-	private boolean mIsPlaying;
-	private int mCurrentState;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
-
-		mMediaBrowserAdapter = new MediaBrowserAdapter(this);
-		mMediaBrowserAdapter.addListener(new MediaBrowserListener());
-	}
+    private MediaBrowserAdapter mMediaBrowserAdapter;
+    private boolean mIsPlaying;
+    private int mCurrentState;
 
     @Override
-	public void onStart() {
-		super.onStart();
-		mMediaBrowserAdapter.onStart();
-	}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+
+        m_jniExport = new jniExport();
+
+        mMediaBrowserAdapter = new MediaBrowserAdapter(this);
+        mMediaBrowserAdapter.addListener(new MediaBrowserListener());
+    }
 
     @Override
-	public void onStop() {
-		super.onStop();
-		mMediaBrowserAdapter.onStop();
-	}
+    public void onStart() {
+        super.onStart();
+        mMediaBrowserAdapter.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mMediaBrowserAdapter.onStop();
+    }
+
+    public void playstation() {
+        try {
+            mMediaBrowserAdapter.getTransportControls().play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pausestation() {
+//        mMediaBrowserAdapter.getTransportControls().pause();
+    }
+
+    public void setestation(String url) {
+//        mMediaBrowserAdapter.getTransportControls().playFromUri(Uri.parse(url), null);
+    }
+
+    public void setnotificationtext(String txt) {
+        //TODO
+    }
 
     private class MediaBrowserListener extends MediaBrowserAdapter.MediaBrowserChangeListener {
 
-		@Override
-		public void onConnected(@Nullable MediaControllerCompat mediaController) {
-			super.onConnected(mediaController);
-		}
+        @Override
+        public void onConnected(@Nullable MediaControllerCompat mediaController) {
+            super.onConnected(mediaController);
+        }
 
-	    @Override
-		public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
-			mIsPlaying = playbackState != null &&
-			playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
+        @Override
+        public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
+            mIsPlaying = playbackState != null &&
+                    playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
 
-			if (playbackState == null) {
-				return;
-			}
-		    Log.d("MediaBrowserListener", "playbackState: " + playbackState);
-			switch (playbackState.getState()) {
-				case PlaybackStateCompat.STATE_PLAYING: {
-					mCurrentState = STATE_PLAYING;
-					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PLAYING;");
-					break;
-				}
-			    case PlaybackStateCompat.STATE_PAUSED: {
-					mCurrentState = STATE_PAUSED;
-					m_jniExport.sendSetTitle("");
-					Log.d("MediaBrowserListener", "mCurrentState = STATE_PAUSED;");
-					break;
-				}
-			    case PlaybackStateCompat.STATE_NONE: {
-					mCurrentState = STATE_STOPPED;
-					m_jniExport.sendSetTitle("");
-					Log.d("MediaBrowserListener", "mCurrentState = STATE_STOPPED;");
-					break;
-				}
-			    default: {
-					Log.d("MediaBrowserListener", "ccccc unknown state");
-					break;
-				}
-			}
-		    m_jniExport.sendSetFocus(mCurrentState);
-		}
+            if (playbackState == null) {
+                return;
+            }
+            Log.d("MediaBrowserListener", "playbackState: " + playbackState);
+            switch (playbackState.getState()) {
+                case PlaybackStateCompat.STATE_PLAYING: {
+                    mCurrentState = STATE_PLAYING;
+                    Log.d("mMediaControllerCompat", "mCurrentState = STATE_PLAYING;");
+                    break;
+                }
+                case PlaybackStateCompat.STATE_PAUSED: {
+                    mCurrentState = STATE_PAUSED;
+                    m_jniExport.sendSetTitle("");
+                    Log.d("MediaBrowserListener", "mCurrentState = STATE_PAUSED;");
+                    break;
+                }
+                case PlaybackStateCompat.STATE_NONE: {
+                    mCurrentState = STATE_STOPPED;
+                    m_jniExport.sendSetTitle("");
+                    Log.d("MediaBrowserListener", "mCurrentState = STATE_STOPPED;");
+                    break;
+                }
+                default: {
+                    Log.d("MediaBrowserListener", "ccccc unknown state");
+                    break;
+                }
+            }
+            m_jniExport.sendSetFocus(mCurrentState);
+        }
 
-	    @Override
-		public void onMetadataChanged(MediaMetadataCompat mediaMetadata) {
-			if (mediaMetadata == null) {
-				return;
-			}
-		/*
+        @Override
+        public void onMetadataChanged(MediaMetadataCompat mediaMetadata) {
+            if (mediaMetadata == null) {
+                return;
+            }
+        /*
 		    mTitleTextView.setText(
 			        mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
 			mArtistTextView.setText(
 			        mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
 			mAlbumArt.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));*/
-		}
-	}
-
+        }
     }
+
+}
 /*
     private int mCurrentState;
 

@@ -16,8 +16,8 @@
 
 package net.quatur.filtermusicQt;
 
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 
 import net.quatur.filtermusicQt.players.MediaPlayerAdapter;
 
@@ -27,8 +27,8 @@ import net.quatur.filtermusicQt.players.MediaPlayerAdapter;
  */
 public abstract class PlaybackInfoListener {
 
-	public abstract void onPlaybackStateChange(PlaybackStateCompat state);
+    public abstract void onPlaybackStateChange(PlaybackStateCompat state);
 
-	public void onPlaybackCompleted() {
-		}
+    public void onPlaybackCompleted() {
+    }
 }
