@@ -48,9 +48,11 @@ void AndroidAudioPlayer::setMedia(AudioMedia* media)
 
 	qDebug() << "updateStation";
 	const QString stationUrl = this->media()->url();
-	QtAndroid::runOnAndroidThread([stationUrl] {
-		QtAndroid::androidActivity().callMethod<void>("setestation","(Ljava/lang/String;)V",
-													  QAndroidJniObject::fromString(stationUrl).object<jstring>());
+	const QString stationName = this->media()->artist();
+	QtAndroid::runOnAndroidThread([stationUrl, stationName] {
+		QtAndroid::androidActivity().callMethod<void>("setStation","(Ljava/lang/String;Ljava/lang/String;)V",
+													  QAndroidJniObject::fromString(stationUrl).object<jstring>(),
+													  QAndroidJniObject::fromString(stationName).object<jstring>());
 	});
 }
 

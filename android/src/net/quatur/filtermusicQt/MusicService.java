@@ -20,6 +20,7 @@ import android.app.Notification;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -116,10 +117,25 @@ public class MusicService extends MediaBrowserServiceCompat {
         builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "soma fm artist");
         builder.putString(MediaMetadataCompat.METADATA_KEY_GENRE, "genre");
         builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "soma fm title");
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, "http://ice1.somafm.com/groovesalad-128-mp3");
 //            builder.putLong(
 //                    MediaMetadataCompat.METADATA_KEY_DURATION,
 //                    metadataWithoutBitmap.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
         builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
+        return builder.build();
+    }
+
+    private MediaMetadataCompat getMetadata(String mediaId, String streamUrl, String album, String artist, String genre, String title) {
+        Bitmap albumArt = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+        MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, mediaId);
+        builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album);
+        builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist);
+        builder.putString(MediaMetadataCompat.METADATA_KEY_GENRE, genre);
+        builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, title);
+        builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, streamUrl);
         return builder.build();
     }
 
@@ -195,6 +211,31 @@ public class MusicService extends MediaBrowserServiceCompat {
 //            mQueueIndex = mQueueIndex > 0 ? mQueueIndex - 1 : mPlaylist.size() - 1;
             mPreparedMedia = null;
             onPlay();
+        }
+
+        @Override
+        public void onPlayFromUri(Uri uri, Bundle extras) {
+            super.onPlayFromUri(uri, extras);
+        }
+
+        @Override
+        public void onPrepareFromUri(Uri uri, Bundle extras) {
+            super.onPrepareFromUri(uri, extras);
+
+            final String mediaId = mPlaylist.get(mQueueIndex).getDescription().getMediaId();
+            mPreparedMedia = getMetadata("mediaId",
+                    uri.toString(),
+                    "album",
+                    extras.getString("name"),
+                    "genre",
+                    "title");
+            mSession.setMetadata(mPreparedMedia);
+
+            Log.d(TAG, "onPrepareFromUri");
+
+            if (!mSession.isActive()) {
+                mSession.setActive(true);
+            }
         }
 
         @Override

@@ -83,7 +83,7 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
     public void playFromMedia(MediaMetadataCompat metadata) {
         mCurrentMedia = metadata;
         final String mediaId = metadata.getDescription().getMediaId();
-        playStream("http://ice1.somafm.com/groovesalad-128-mp3");
+        playStream(metadata.getDescription().getMediaUri().toString());
     }
 
     @Override
