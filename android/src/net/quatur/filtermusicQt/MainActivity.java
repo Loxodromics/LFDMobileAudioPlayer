@@ -106,6 +106,12 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 					Log.d("MediaBrowserListener", "mCurrentState = STATE_STOPPED;");
 					break;
 					}
+                case PlaybackStateCompat.STATE_STOPPED: {
+                    mCurrentState = STATE_STOPPED;
+                    m_jniExport.sendSetTitle("");
+                    Log.d("MediaBrowserListener", "mCurrentState = STATE_STOPPED;");
+                    break;
+                }
 			    default: {
 					Log.d("MediaBrowserListener", "ccccc unknown state");
 					break;
