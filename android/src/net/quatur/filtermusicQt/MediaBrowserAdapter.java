@@ -218,7 +218,7 @@ public class MediaBrowserAdapter {
         @Override
         public void onMetadataChanged(final MediaMetadataCompat metadata) {
             // Filtering out needless updates, given that the metadata has not changed.
-            if (isMediaIdSame(metadata, mState.getMediaMetadata())) {
+            if (isMediaTitleSame(metadata, mState.getMediaMetadata())) {
                 Log.d(TAG, "onMetadataChanged: Filtering out needless onMetadataChanged() update");
                 return;
             } else {
@@ -252,16 +252,16 @@ public class MediaBrowserAdapter {
             Log.d(TAG, "onSessionDestroyed: MusicService is dead!!!");
         }
 
-        private boolean isMediaIdSame(MediaMetadataCompat currentMedia,
-                                      MediaMetadataCompat newMedia) {
+        private boolean isMediaTitleSame(MediaMetadataCompat currentMedia,
+                                         MediaMetadataCompat newMedia) {
             if (currentMedia == null || newMedia == null) {
                 return false;
             }
-            String newMediaId =
-                    newMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
-            String currentMediaId =
-                    currentMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID);
-            return newMediaId.equals(currentMediaId);
+            String newMediaTitle =
+                    newMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+            String currentMediaTitle =
+                    currentMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+            return newMediaTitle.equals(currentMediaTitle);
         }
 
     }

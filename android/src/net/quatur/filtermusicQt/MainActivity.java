@@ -13,6 +13,8 @@ import com.crashlytics.android.ndk.CrashlyticsNdk;
 
 import net.quatur.QAndroidResultReceiver.jniExport.jniExport;
 
+import java.io.IOException;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity {
@@ -116,7 +118,13 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 		public void onMetadataChanged(MediaMetadataCompat mediaMetadata) {
 			if (mediaMetadata == null) {
 				return;
-				}
+            }
+            try {
+                m_jniExport.sendSetTitle(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE) + " - " + mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 		/*
 		    mTitleTextView.setText(
 			        mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));

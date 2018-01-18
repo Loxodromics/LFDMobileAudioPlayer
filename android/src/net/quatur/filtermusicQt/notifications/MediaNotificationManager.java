@@ -51,7 +51,7 @@ public class MediaNotificationManager {
     public static final int NOTIFICATION_ID = 412;
 
     private static final String TAG = MediaNotificationManager.class.getSimpleName();
-    private static final String CHANNEL_ID = "com.example.android.musicplayer.channel";
+    private static final String CHANNEL_ID = "net.quatur.filtermusicQt.channel";
     private static final int REQUEST_CODE = 501;
 
     private final MusicService mService;
@@ -81,7 +81,7 @@ public class MediaNotificationManager {
                         mService.getString(R.string.label_pause),
                         MediaButtonReceiver.buildMediaButtonPendingIntent(
                                 mService,
-                                PlaybackStateCompat.ACTION_PAUSE));
+                                PlaybackStateCompat.ACTION_STOP));
         mNextAction =
                 new NotificationCompat.Action(
                         R.drawable.ic_skip_next_white_24dp,
@@ -134,7 +134,7 @@ public class MediaNotificationManager {
         builder.setStyle(
                 new MediaStyle()
                         .setMediaSession(token)
-                        .setShowActionsInCompactView(0, 1, 2)
+                        .setShowActionsInCompactView(0)
                         // For backwards compatibility with Android L and earlier.
                         .setShowCancelButton(true)
                         .setCancelButtonIntent(
@@ -157,17 +157,17 @@ public class MediaNotificationManager {
                 // Show controls on lock screen even when user hides sensitive content.
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-        // If skip to next action is enabled.
-        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
-            builder.addAction(mPrevAction);
-        }
+//        // If skip to next action is enabled.
+//        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
+//            builder.addAction(mPrevAction);
+//        }
 
         builder.addAction(isPlaying ? mPauseAction : mPlayAction);
-
-        // If skip to prev action is enabled.
-        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
-            builder.addAction(mNextAction);
-        }
+//
+//        // If skip to prev action is enabled.
+//        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
+//            builder.addAction(mNextAction);
+//        }
 
         return builder;
     }

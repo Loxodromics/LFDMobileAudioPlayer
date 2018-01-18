@@ -191,18 +191,18 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
      */
     @PlaybackStateCompat.Actions
     private long getAvailableActions() {
-        long actions = PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
-                | PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
-                | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
+        long actions = PlaybackStateCompat.ACTION_PLAY_FROM_URI
+                  | PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID;
+//                | PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
+//                | PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
+//                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
         switch (mState) {
             case PlaybackStateCompat.STATE_STOPPED:
                 actions |= PlaybackStateCompat.ACTION_PLAY
-                        | PlaybackStateCompat.ACTION_PAUSE;
+                        | PlaybackStateCompat.ACTION_STOP;
                 break;
             case PlaybackStateCompat.STATE_PLAYING:
                 actions |= PlaybackStateCompat.ACTION_STOP
-                        | PlaybackStateCompat.ACTION_PAUSE
                         | PlaybackStateCompat.ACTION_SEEK_TO;
                 break;
             case PlaybackStateCompat.STATE_PAUSED:
@@ -211,9 +211,7 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
                 break;
             default:
                 actions |= PlaybackStateCompat.ACTION_PLAY
-                        | PlaybackStateCompat.ACTION_PLAY_PAUSE
-                        | PlaybackStateCompat.ACTION_STOP
-                        | PlaybackStateCompat.ACTION_PAUSE;
+                        | PlaybackStateCompat.ACTION_STOP;
         }
         return actions;
     }

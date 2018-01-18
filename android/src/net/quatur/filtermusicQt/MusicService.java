@@ -35,8 +35,12 @@ import android.util.Log;
 import net.quatur.filtermusicQt.notifications.MediaNotificationManager;
 import net.quatur.filtermusicQt.players.MediaPlayerAdapter;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MusicService extends MediaBrowserServiceCompat {
 
@@ -48,6 +52,9 @@ public class MusicService extends MediaBrowserServiceCompat {
     private MediaNotificationManager mMediaNotificationManager;
     private MediaSessionCallback mCallback;
     private boolean mServiceInStartedState;
+    private String mCurrentStreamTitle;
+    private static Timer timer = new Timer();
+    private IcyStreamMeta icyStreamMeta;
 
     @Override
     public void onCreate() {
@@ -112,12 +119,12 @@ public class MusicService extends MediaBrowserServiceCompat {
         Bitmap albumArt = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "soma fm id");
-        builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "filtermusic");
-        builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "soma fm artist");
-        builder.putString(MediaMetadataCompat.METADATA_KEY_GENRE, "genre");
-        builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "soma fm title");
-        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, "http://ice1.somafm.com/groovesalad-128-mp3");
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "id");
+        builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "");
+        builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "");
+        builder.putString(MediaMetadataCompat.METADATA_KEY_GENRE, "");
+        builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "");
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, "");
 //            builder.putLong(
 //                    MediaMetadataCompat.METADATA_KEY_DURATION,
 //                    metadataWithoutBitmap.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
@@ -137,6 +144,59 @@ public class MusicService extends MediaBrowserServiceCompat {
         builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
         builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, streamUrl);
         return builder.build();
+    }
+
+    public void getMeta(final String link) {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new QueryMetaDataTask(link), 0, 5000);
+    }
+
+    private class QueryMetaDataTask extends TimerTask
+    {
+        public String mStationUrl;
+        private String mArtist = "";
+        private String mTitle = "";
+
+        public QueryMetaDataTask(String url) {
+            mStationUrl = url;
+            Log.d("QueryMetaDataTask","constructor ------------" + mStationUrl);
+        }
+
+        public void run() {
+            try {
+                Log.d("QueryMetaDataTask","public void run() {");
+                icyStreamMeta = new IcyStreamMeta(new URL(mStationUrl));
+
+
+                if (mCurrentStreamTitle != icyStreamMeta.getStreamTitle()) {
+                    mCurrentStreamTitle = icyStreamMeta.getStreamTitle();
+
+                    mArtist = icyStreamMeta.getArtist();
+                    mTitle = icyStreamMeta.getTitle();
+
+                    //sendMsg("title", mCurrentStreamTitle);
+
+                    Log.d("QueryMetaDataTask", mArtist + "  ************ " + mTitle);
+
+                    MediaMetadataCompat newMedia = getMetadata(mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID),
+                            mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI),
+                            mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_ALBUM),
+                            mArtist, //mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_ARTIST),
+                            mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_GENRE),
+                            mTitle); //mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+                    mCallback.mPreparedMedia = newMedia;
+                    mSession.setMetadata(newMedia);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (StringIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void stopMeta(){
+        timer.cancel();
     }
 
     // MediaSession Callback: Transport Controls -> MediaPlayerAdapter
@@ -185,18 +245,21 @@ public class MusicService extends MediaBrowserServiceCompat {
             }
 
             mPlayback.playFromMedia(mPreparedMedia);
+            getMeta(mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI));
             Log.d(TAG, "onPlayFromMediaId: MediaSession active");
         }
 
         @Override
         public void onPause() {
             mPlayback.pause();
+            stopMeta();
         }
 
         @Override
         public void onStop() {
             mPlayback.stop();
             mSession.setActive(false);
+            stopMeta();
         }
 
         @Override
@@ -222,13 +285,12 @@ public class MusicService extends MediaBrowserServiceCompat {
         public void onPrepareFromUri(Uri uri, Bundle extras) {
             super.onPrepareFromUri(uri, extras);
 
-            final String mediaId = mPlaylist.get(mQueueIndex).getDescription().getMediaId();
             mPreparedMedia = getMetadata("mediaId",
                     uri.toString(),
                     "album",
                     extras.getString("name"),
                     "genre",
-                    "title");
+                    "filtermusic");
             mSession.setMetadata(mPreparedMedia);
 
             Log.d(TAG, "onPrepareFromUri");
