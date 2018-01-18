@@ -54,7 +54,8 @@ public class MusicService extends MediaBrowserServiceCompat {
     private boolean mServiceInStartedState;
     private String mCurrentStreamTitle;
     private static Timer timer = new Timer();
-    private IcyStreamMeta icyStreamMeta;
+    private IcyStreamMeta mIcyStreamMeta;
+    private PlaybackStateCompat mLastPlaybackState;
 
     @Override
     public void onCreate() {
@@ -159,24 +160,24 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         public QueryMetaDataTask(String url) {
             mStationUrl = url;
-            Log.d("QueryMetaDataTask","constructor ------------" + mStationUrl);
+//            Log.d("QueryMetaDataTask","constructor ------------" + mStationUrl);
         }
 
         public void run() {
             try {
-                Log.d("QueryMetaDataTask","public void run() {");
-                icyStreamMeta = new IcyStreamMeta(new URL(mStationUrl));
+//                Log.d("QueryMetaDataTask","public void run() {");
+                mIcyStreamMeta = new IcyStreamMeta(new URL(mStationUrl));
+//                Log.d("TAG", "current: " + mCurrentStreamTitle + " new: " + mIcyStreamMeta.getStreamTitle());
 
+                if (!mIcyStreamMeta.getStreamTitle().equals(mCurrentStreamTitle)) {
+                    mCurrentStreamTitle = mIcyStreamMeta.getStreamTitle();
 
-                if (mCurrentStreamTitle != icyStreamMeta.getStreamTitle()) {
-                    mCurrentStreamTitle = icyStreamMeta.getStreamTitle();
-
-                    mArtist = icyStreamMeta.getArtist();
-                    mTitle = icyStreamMeta.getTitle();
+                    mArtist = mIcyStreamMeta.getArtist();
+                    mTitle = mIcyStreamMeta.getTitle();
 
                     //sendMsg("title", mCurrentStreamTitle);
 
-                    Log.d("QueryMetaDataTask", mArtist + "  ************ " + mTitle);
+//                    Log.d("QueryMetaDataTask", mArtist + "  ************ " + mTitle);
 
                     MediaMetadataCompat newMedia = getMetadata(mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID),
                             mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI),
@@ -186,6 +187,15 @@ public class MusicService extends MediaBrowserServiceCompat {
                             mTitle); //mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
                     mCallback.mPreparedMedia = newMedia;
                     mSession.setMetadata(newMedia);
+
+                    Notification notification =
+                            mMediaNotificationManager.getNotification(
+                                    newMedia, mLastPlaybackState, getSessionToken());
+                    mMediaNotificationManager.getNotificationManager()
+                            .notify(MediaNotificationManager.NOTIFICATION_ID, notification);
+//                    Log.d(TAG, "onMetadataChanged");
+
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -323,6 +333,7 @@ public class MusicService extends MediaBrowserServiceCompat {
         public void onPlaybackStateChange(PlaybackStateCompat state) {
             // Report the state to the MediaSession.
             mSession.setPlaybackState(state);
+            mLastPlaybackState = state;
 
             // Manage the started state of this service.
             switch (state.getState()) {
@@ -336,6 +347,16 @@ public class MusicService extends MediaBrowserServiceCompat {
                     mServiceManager.moveServiceOutOfStartedState(state);
                     break;
             }
+        }
+
+        @Override
+        public void onMetadataChanged(MediaMetadataCompat metadata) {
+            Notification notification =
+                    mMediaNotificationManager.getNotification(
+                            mPlayback.getCurrentMedia(), mLastPlaybackState, getSessionToken());
+            mMediaNotificationManager.getNotificationManager()
+                    .notify(MediaNotificationManager.NOTIFICATION_ID, notification);
+            Log.d(TAG, "onMetadataChanged");
         }
 
         class ServiceManager {

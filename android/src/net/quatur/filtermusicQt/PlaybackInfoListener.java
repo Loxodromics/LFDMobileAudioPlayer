@@ -16,6 +16,7 @@
 
 package net.quatur.filtermusicQt;
 
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
@@ -28,6 +29,7 @@ import net.quatur.filtermusicQt.players.MediaPlayerAdapter;
 public abstract class PlaybackInfoListener {
 
     public abstract void onPlaybackStateChange(PlaybackStateCompat state);
+    public abstract void onMetadataChanged(MediaMetadataCompat mediaMetadata);
 
     public void onPlaybackCompleted() {
     }
