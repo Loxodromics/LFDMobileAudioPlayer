@@ -36,108 +36,108 @@ public class MainActivity extends org.qtproject.qt5.android.bindings.QtActivity 
 
 		mMediaBrowserAdapter = new MediaBrowserAdapter(this);
 		mMediaBrowserAdapter.addListener(new MediaBrowserListener());
-		}
+	}
 
-    @Override
+	@Override
 	public void onStart() {
 		super.onStart();
 		mMediaBrowserAdapter.onStart();
-		}
+	}
 
-    @Override
+	@Override
 	public void onStop() {
 		super.onStop();
 		mMediaBrowserAdapter.onStop();
-		}
-
-    public void playstation() {
-		try {
-			mMediaBrowserAdapter.getTransportControls().play();
-			} catch (Exception e) {
-		    e.printStackTrace();
-			}
 	}
 
-    public void pausestation() {
-		mMediaBrowserAdapter.getTransportControls().pause();
+	public void playStation() {
+		try {
+			mMediaBrowserAdapter.getTransportControls().play();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
 
-    public void setStation(String url, String name) {
-        Bundle bundle = new Bundle();
-        bundle.putString("name", name);
+	public void stopStation() {
+		mMediaBrowserAdapter.getTransportControls().stop();
+	}
+
+	public void setStation(String url, String name) {
+		Bundle bundle = new Bundle();
+		bundle.putString("name", name);
 		mMediaBrowserAdapter.getTransportControls().prepareFromUri(Uri.parse(url), bundle);
-		}
+	}
 
-    public void setnotificationtext(String txt) {
+	public void setnotificationtext(String txt) {
 		//TODO
-		}
+	}
 
-    private class MediaBrowserListener extends MediaBrowserAdapter.MediaBrowserChangeListener {
+	private class MediaBrowserListener extends MediaBrowserAdapter.MediaBrowserChangeListener {
 
 		@Override
 		public void onConnected(@Nullable MediaControllerCompat mediaController) {
 			super.onConnected(mediaController);
-			}
+		}
 
-	    @Override
+		@Override
 		public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
 			mIsPlaying = playbackState != null &&
-			        playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
+					playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
 
-					if (playbackState == null) {
+			if (playbackState == null) {
 				return;
-				}
-		    Log.d("MediaBrowserListener", "playbackState: " + playbackState);
+			}
+			Log.d("MediaBrowserListener", "playbackState: " + playbackState);
 			switch (playbackState.getState()) {
 				case PlaybackStateCompat.STATE_PLAYING: {
 					mCurrentState = STATE_PLAYING;
 					Log.d("mMediaControllerCompat", "mCurrentState = STATE_PLAYING;");
 					break;
-					}
-			    case PlaybackStateCompat.STATE_PAUSED: {
+				}
+				case PlaybackStateCompat.STATE_PAUSED: {
 					mCurrentState = STATE_PAUSED;
 					m_jniExport.sendSetTitle("");
 					Log.d("MediaBrowserListener", "mCurrentState = STATE_PAUSED;");
 					break;
-					}
-			    case PlaybackStateCompat.STATE_NONE: {
+				}
+				case PlaybackStateCompat.STATE_NONE: {
 					mCurrentState = STATE_STOPPED;
 					m_jniExport.sendSetTitle("");
 					Log.d("MediaBrowserListener", "mCurrentState = STATE_STOPPED;");
 					break;
-					}
-                case PlaybackStateCompat.STATE_STOPPED: {
-                    mCurrentState = STATE_STOPPED;
-                    m_jniExport.sendSetTitle("");
-                    Log.d("MediaBrowserListener", "mCurrentState = STATE_STOPPED;");
-                    break;
-                }
-			    default: {
+				}
+				case PlaybackStateCompat.STATE_STOPPED: {
+					mCurrentState = STATE_STOPPED;
+					m_jniExport.sendSetTitle("");
+					Log.d("MediaBrowserListener", "mCurrentState = STATE_STOPPED;");
+					break;
+				}
+				default: {
 					Log.d("MediaBrowserListener", "ccccc unknown state");
 					break;
-					}
+				}
 			}
-		    m_jniExport.sendSetFocus(mCurrentState);
-			}
+			m_jniExport.sendSetFocus(mCurrentState);
+		}
 
-	    @Override
+		@Override
 		public void onMetadataChanged(MediaMetadataCompat mediaMetadata) {
 			if (mediaMetadata == null) {
 				return;
-            }
-            try {
-                m_jniExport.sendSetTitle(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE) + " - " + mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+			}
+			try {
+				m_jniExport.sendSetTitle(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE) + " - " + mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		/*
 		    mTitleTextView.setText(
 			        mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
 			mArtistTextView.setText(
 			        mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
 			mAlbumArt.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));*/
-			}
+		}
 	}
 
 }

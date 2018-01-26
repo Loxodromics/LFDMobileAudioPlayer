@@ -28,7 +28,7 @@ void AndroidAudioPlayer::play()
 	{
 		this->setPlayingState(PlayingState::Connecting);
 		QtAndroid::runOnAndroidThread([] {
-			QtAndroid::androidActivity().callMethod<void>("playstation");
+			QtAndroid::androidActivity().callMethod<void>("playStation");
 		});
 	}
 }
@@ -38,7 +38,7 @@ void AndroidAudioPlayer::pause()
 	qDebug() << "AndroidAudioPlayer::pause()";
 //	this->setPlayingState(PlayingState::NotConnected);
 	QtAndroid::runOnAndroidThread([] {
-		QtAndroid::androidActivity().callMethod<void>("pausestation");
+		QtAndroid::androidActivity().callMethod<void>("stopStation");
 	});
 }
 
