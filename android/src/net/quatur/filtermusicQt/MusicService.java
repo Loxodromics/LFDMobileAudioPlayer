@@ -172,30 +172,31 @@ public class MusicService extends MediaBrowserServiceCompat {
                 if (!mIcyStreamMeta.getStreamTitle().equals(mCurrentStreamTitle)) {
                     mCurrentStreamTitle = mIcyStreamMeta.getStreamTitle();
 
-                    mArtist = mIcyStreamMeta.getArtist();
-                    mTitle = mIcyStreamMeta.getTitle();
+                    if (!mCurrentStreamTitle.isEmpty()) {
 
-                    //sendMsg("title", mCurrentStreamTitle);
+                        mArtist = mIcyStreamMeta.getArtist();
+                        mTitle = mIcyStreamMeta.getTitle();
+
+                        //sendMsg("title", mCurrentStreamTitle);
 
 //                    Log.d("QueryMetaDataTask", mArtist + "  ************ " + mTitle);
 
-                    MediaMetadataCompat newMedia = getMetadata(mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID),
-                            mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI),
-                            mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_ALBUM),
-                            mArtist, //mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_ARTIST),
-                            mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_GENRE),
-                            mTitle); //mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
-                    mCallback.mPreparedMedia = newMedia;
-                    mSession.setMetadata(newMedia);
+                        MediaMetadataCompat newMedia = getMetadata(mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID),
+                                mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI),
+                                mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_ALBUM),
+                                mArtist, //mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_ARTIST),
+                                mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_GENRE),
+                                mTitle); //mCallback.mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+                        mCallback.mPreparedMedia = newMedia;
+                        mSession.setMetadata(newMedia);
 
-                    Notification notification =
-                            mMediaNotificationManager.getNotification(
-                                    newMedia, mLastPlaybackState, getSessionToken());
-                    mMediaNotificationManager.getNotificationManager()
-                            .notify(MediaNotificationManager.NOTIFICATION_ID, notification);
+                        Notification notification =
+                                mMediaNotificationManager.getNotification(
+                                        newMedia, mLastPlaybackState, getSessionToken());
+                        mMediaNotificationManager.getNotificationManager()
+                                .notify(MediaNotificationManager.NOTIFICATION_ID, notification);
 //                    Log.d(TAG, "onMetadataChanged");
-
-
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -229,13 +230,14 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         @Override
         public void onPrepare() {
-            if (mQueueIndex < 0 && mPlaylist.isEmpty()) {
+            if (isReadyToPlay()) {
                 // Nothing to play.
                 return;
             }
 
-            final String mediaId = mPlaylist.get(mQueueIndex).getDescription().getMediaId();
-            mPreparedMedia = getMetadata("mediaId");
+//            final String mediaId = mPlaylist.get(mQueueIndex).getDescription().getMediaId();
+//            mPreparedMedia = getMetadata("mediaId");
+
             mSession.setMetadata(mPreparedMedia);
 
             if (!mSession.isActive()) {
@@ -251,7 +253,7 @@ public class MusicService extends MediaBrowserServiceCompat {
             }
 
             if (mPreparedMedia == null) {
-                onPrepare();
+                onPrepare(); //FIXME: that won't change anything, we have no URL
             }
 
             mPlayback.playFromMedia(mPreparedMedia);
@@ -316,7 +318,7 @@ public class MusicService extends MediaBrowserServiceCompat {
         }
 
         private boolean isReadyToPlay() {
-            return true; //(!mPlaylist.isEmpty());
+            return (mPreparedMedia != null && !mPreparedMedia.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI).isEmpty());
         }
     }
 
