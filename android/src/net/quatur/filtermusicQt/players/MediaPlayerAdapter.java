@@ -22,6 +22,7 @@ import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import net.quatur.filtermusicQt.MainActivity;
 import net.quatur.filtermusicQt.PlaybackInfoListener;
@@ -33,7 +34,7 @@ import net.quatur.filtermusicQt.PlayerAdapter;
  */
 public final class MediaPlayerAdapter extends PlayerAdapter {
 
-    private final Context mContext;
+    private static final String TAG = MediaPlayerAdapter.class.getSimpleName();
     private MediaPlayer mMediaPlayer;
     private String mStreamUrl;
     private PlaybackInfoListener mPlaybackInfoListener;
@@ -41,13 +42,8 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
     private int mState;
     private boolean mCurrentMediaPlayedToCompletion;
 
-    // Work-around for a MediaPlayer bug related to the behavior of MediaPlayer.seekTo()
-    // while not playing.
-    private int mSeekWhileNotPlaying = -1;
-
     public MediaPlayerAdapter(Context context, PlaybackInfoListener listener) {
         super(context);
-        mContext = context.getApplicationContext();
         mPlaybackInfoListener = listener;
     }
 
@@ -113,16 +109,21 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
         initializeMediaPlayer();
 
         try {
-
             mMediaPlayer.setDataSource(mStreamUrl);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to set stream URL: " + mStreamUrl, e);
+//            throw new RuntimeException("Failed to set stream URL: " + mStreamUrl, e);
+            Log.d(TAG, "Failed to set stream URL: " + mStreamUrl);
+            setNewState(PlaybackStateCompat.STATE_STOPPED);
+            return;
         }
 
         try {
             mMediaPlayer.prepare();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to prepare stream URL: " + mStreamUrl, e);
+//            throw new RuntimeException("Failed to prepare stream URL: " + mStreamUrl, e);
+            Log.d(TAG,"Failed to prepare stream URL: " + mStreamUrl);
+            setNewState(PlaybackStateCompat.STATE_STOPPED);
+            return;
         }
 
         play();
@@ -218,16 +219,16 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
 
     @Override
     public void seekTo(long position) {
-        if (mMediaPlayer != null) {
-            if (!mMediaPlayer.isPlaying()) {
-                mSeekWhileNotPlaying = (int) position;
-            }
-            mMediaPlayer.seekTo((int) position);
-
-            // Set the state (to the current state) because the position changed and should
-            // be reported to clients.
-            setNewState(mState);
-        }
+//        if (mMediaPlayer != null) {
+//            if (!mMediaPlayer.isPlaying()) {
+//                mSeekWhileNotPlaying = (int) position;
+//            }
+//            mMediaPlayer.seekTo((int) position);
+//
+//            // Set the state (to the current state) because the position changed and should
+//            // be reported to clients.
+//            setNewState(mState);
+//        }
     }
 
     @Override
