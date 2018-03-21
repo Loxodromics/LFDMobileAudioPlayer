@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<manifest package="net.quatur.filtermusicQt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.4.0" android:versionCode="140" android:installLocation="auto">
+<manifest package="net.quatur.filtermusicQt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.6.0" android:versionCode="160" android:installLocation="auto">
     <application android:icon="@drawable/icon" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="@string/app_name">
-        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="net.quatur.filtermusicQt.MainActivity" android:label="filtermusic" android:screenOrientation="portrait" android:theme="@style/AppTheme">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="net.quatur.filtermusicQt.MainActivity" android:label="filtermusic" android:screenOrientation="portrait" android:theme="@style/AppTheme" android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -30,10 +30,7 @@
             <meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/splash"/>
             <!-- Splash screen -->
         </activity>
-        <service
-                android:name=".MusicService"
-                android:enabled="true"
-                android:exported="true">
+        <service android:name=".MusicService" android:enabled="true" android:exported="true">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
@@ -48,9 +45,9 @@
         -->
         <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
-                <action android:name="android.media.browse.MediaBrowserService" />
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+                <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
+                <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
         </receiver>
     </application>
