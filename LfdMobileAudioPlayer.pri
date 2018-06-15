@@ -12,11 +12,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     $$PWD/src/lfdaudioplayer.h \
-    $$PWD/src/lfdaudiomedia.h
+    $$PWD/src/lfdaudiomedia.h \
+    $$PWD/src/genericQt/genericqtaudioplayer.h
 
 SOURCES += \
     $$PWD/src/lfdaudioplayer.cpp \
-    $$PWD/src/lfdaudiomedia.cpp
+    $$PWD/src/lfdaudiomedia.cpp \
+    $$PWD/src/genericQt/genericqtaudioplayer.cpp
 
 ios {
     QMAKE_CXXFLAGS += -fobjc-arc
@@ -53,6 +55,8 @@ android {
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 } # android
+
+QT += multimedia
 
 DISTFILES += \
     $$PWD/android/src/net/quatur/filtermusicQt/BackgroundBroadcastReceiver.java
