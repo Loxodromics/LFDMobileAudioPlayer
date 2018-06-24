@@ -149,7 +149,7 @@ public class MediaNotificationManager {
 				.setContentTitle(description.getTitle())
 				// Subtitle - Usually Artist name.
 				.setContentText(description.getSubtitle())
-				.setLargeIcon(BitmapFactory.decodeResource(mService.getResources(), R.mipmap.ic_launcher))
+				.setLargeIcon(BitmapFactory.decodeResource(mService.getResources(), R.drawable.filtermusic_logo_fm))
 				// When notification is deleted (when playback is paused and notification can be
 				// deleted) fire MediaButtonPendingIntent with ACTION_STOP.
 				.setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(
