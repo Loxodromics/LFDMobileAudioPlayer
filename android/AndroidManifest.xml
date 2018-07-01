@@ -53,11 +53,13 @@
     </application>
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="26"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
-    <!-- %%INSERT_PERMISSIONS -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
+
     <!-- %%INSERT_FEATURES -->
+
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>
