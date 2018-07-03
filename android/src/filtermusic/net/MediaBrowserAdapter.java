@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.quatur.filtermusicQt;
+package filtermusic.net;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,7 +28,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
-import net.quatur.filtermusicQt.MusicService;
+import filtermusic.net.MusicService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.quatur.filtermusicQt.players;
+package filtermusic.net.players;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -24,9 +24,9 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
-import net.quatur.filtermusicQt.MainActivity;
-import net.quatur.filtermusicQt.PlaybackInfoListener;
-import net.quatur.filtermusicQt.PlayerAdapter;
+import filtermusic.net.MainActivity;
+import filtermusic.net.PlaybackInfoListener;
+import filtermusic.net.PlayerAdapter;
 
 /**
  * Exposes the functionality of the {@link MediaPlayer} and implements the {@link PlayerAdapter}

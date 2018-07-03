@@ -1,4 +1,4 @@
-package net.quatur.filtermusicQt;
+package filtermusic.net;
 
 import android.net.Uri;
 import android.os.Bundle;

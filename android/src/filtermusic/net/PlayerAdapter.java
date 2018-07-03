@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.quatur.filtermusicQt;
+package filtermusic.net;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

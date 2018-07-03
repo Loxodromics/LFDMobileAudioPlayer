@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package net.quatur.filtermusicQt;
+package filtermusic.net;
 
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
-import net.quatur.filtermusicQt.players.MediaPlayerAdapter;
+import filtermusic.net.players.MediaPlayerAdapter;
 
 /**
  * Listener to provide state updates from {@link MediaPlayerAdapter} (the media player)

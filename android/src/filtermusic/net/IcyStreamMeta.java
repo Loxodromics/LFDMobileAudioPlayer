@@ -1,4 +1,4 @@
-package net.quatur.filtermusicQt;
+package filtermusic.net;
 
 import java.io.IOException;
 import java.io.InputStream;

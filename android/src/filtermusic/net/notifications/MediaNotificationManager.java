@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.quatur.filtermusicQt.notifications;
+package filtermusic.net.notifications;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -37,9 +37,9 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
-import net.quatur.filtermusicQt.MainActivity;
-import net.quatur.filtermusicQt.MusicService;
-import net.quatur.filtermusicQt.R;
+import filtermusic.net.MainActivity;
+import filtermusic.net.MusicService;
+import filtermusic.net.R;
 
 
 /**
@@ -51,7 +51,7 @@ public class MediaNotificationManager {
 	public static final int NOTIFICATION_ID = 412;
 
 	private static final String TAG = MediaNotificationManager.class.getSimpleName();
-	private static final String CHANNEL_ID = "net.quatur.filtermusicQt.channel";
+	private static final String CHANNEL_ID = "filtermusic.net.channel";
 	private static final int REQUEST_CODE = 501;
 
 	private final MusicService mService;
