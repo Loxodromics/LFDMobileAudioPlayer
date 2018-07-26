@@ -111,12 +111,17 @@ public class IcyStreamMeta {
             // Headers are sent within a stream
             StringBuilder strHeaders = new StringBuilder();
             char c;
-            while ((c = (char) stream.read()) != -1) {
+            int count = 0;
+            /// somehow this can run into "Fatal Exception: java.lang.OutOfMemoryError"
+            /// lets limit it to abitrary 4080 iterations and see if this helps
+            /// I assume this happens with broken headers or not Icy streams (pe)
+            while ( ((c = (char) stream.read()) != -1) || (count < 255) ) {
                 strHeaders.append(c);
                 if (strHeaders.length() > 5 && (strHeaders.substring((strHeaders.length() - 4), strHeaders.length()).equals("\r\n\r\n"))) {
                     // end of headers
                     break;
                 }
+                count++;
             }
 
             // Match headers to get metadata offset within a stream
