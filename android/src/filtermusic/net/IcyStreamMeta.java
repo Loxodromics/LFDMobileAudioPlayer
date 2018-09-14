@@ -113,9 +113,10 @@ public class IcyStreamMeta {
             char c;
             int count = 0;
             /// somehow this can run into "Fatal Exception: java.lang.OutOfMemoryError"
-            /// lets limit it to abitrary 4080 iterations and see if this helps
+            /// lets limit it to 4080 iterations and see if this helps
+            /// http://www.smackfu.com/stuff/programming/shoutcast.html
             /// I assume this happens with broken headers or not Icy streams (pe)
-            while ( ((c = (char) stream.read()) != -1) || (count < 255) ) {
+            while ( ((c = (char) stream.read()) != -1) && (count < 4080) ) {
                 strHeaders.append(c);
                 if (strHeaders.length() > 5 && (strHeaders.substring((strHeaders.length() - 4), strHeaders.length()).equals("\r\n\r\n"))) {
                     // end of headers
