@@ -39,261 +39,261 @@ import java.util.List;
  */
 public class MediaBrowserAdapter {
 
-    private static final String TAG = MediaBrowserAdapter.class.getSimpleName();
+	private static final String TAG = MediaBrowserAdapter.class.getSimpleName();
 
-    /**
-     * Helper class for easily subscribing to changes in a MediaBrowserService connection.
-     */
-    public static abstract class MediaBrowserChangeListener {
+	/**
+	 * Helper class for easily subscribing to changes in a MediaBrowserService connection.
+	 */
+	public static abstract class MediaBrowserChangeListener {
 
-        public void onConnected(@Nullable MediaControllerCompat mediaController) {
-        }
+		public void onConnected(@Nullable MediaControllerCompat mediaController) {
+			}
 
-        public void onMetadataChanged(@Nullable MediaMetadataCompat mediaMetadata) {
-        }
+	    public void onMetadataChanged(@Nullable MediaMetadataCompat mediaMetadata) {
+			}
 
-        public void onPlaybackStateChanged(@Nullable PlaybackStateCompat playbackState) {
-        }
-    }
+	    public void onPlaybackStateChanged(@Nullable PlaybackStateCompat playbackState) {
+			}
+	}
 
     private final InternalState mState;
 
-    private final Context mContext;
-    private final List<MediaBrowserChangeListener> mListeners = new ArrayList<>();
+	private final Context mContext;
+	private final List<MediaBrowserChangeListener> mListeners = new ArrayList<>();
 
-    private final MediaBrowserConnectionCallback mMediaBrowserConnectionCallback =
-            new MediaBrowserConnectionCallback();
-    private final MediaControllerCallback mMediaControllerCallback =
-            new MediaControllerCallback();
-    private final MediaBrowserSubscriptionCallback mMediaBrowserSubscriptionCallback =
-            new MediaBrowserSubscriptionCallback();
+	private final MediaBrowserConnectionCallback mMediaBrowserConnectionCallback =
+	        new MediaBrowserConnectionCallback();
+			private final MediaControllerCallback mMediaControllerCallback =
+	        new MediaControllerCallback();
+			private final MediaBrowserSubscriptionCallback mMediaBrowserSubscriptionCallback =
+	        new MediaBrowserSubscriptionCallback();
 
-    private MediaBrowserCompat mMediaBrowser;
+			private MediaBrowserCompat mMediaBrowser;
 
-    @Nullable
-    private MediaControllerCompat mMediaController;
+	@Nullable
+	private MediaControllerCompat mMediaController;
 
-    public MediaBrowserAdapter(Context context) {
-        mContext = context;
-        mState = new InternalState();
-    }
+	public MediaBrowserAdapter(Context context) {
+		mContext = context;
+		mState = new InternalState();
+		}
 
     public void onStart() {
-        if (mMediaBrowser == null) {
-            mMediaBrowser =
-                    new MediaBrowserCompat(
-                            mContext,
-                            new ComponentName(mContext, MusicService.class),
-                            mMediaBrowserConnectionCallback,
-                            null);
-            mMediaBrowser.connect();
-        }
-        Log.d(TAG, "onStart: Creating MediaBrowser, and connecting");
-    }
+		if (mMediaBrowser == null) {
+			mMediaBrowser =
+			        new MediaBrowserCompat(
+					        mContext,
+							new ComponentName(mContext, MusicService.class),
+							mMediaBrowserConnectionCallback,
+							null);
+							mMediaBrowser.connect();
+			}
+	    Log.d(TAG, "onStart: Creating MediaBrowser, and connecting");
+		}
 
     public void onStop() {
-        if (mMediaController != null) {
-            mMediaController.unregisterCallback(mMediaControllerCallback);
-            mMediaController = null;
-        }
-        if (mMediaBrowser != null && mMediaBrowser.isConnected()) {
-            mMediaBrowser.disconnect();
-            mMediaBrowser = null;
-        }
-        resetState();
-        Log.d(TAG, "onStop: Releasing MediaController, Disconnecting from MediaBrowser");
-    }
+		if (mMediaController != null) {
+			mMediaController.unregisterCallback(mMediaControllerCallback);
+			mMediaController = null;
+			}
+	    if (mMediaBrowser != null && mMediaBrowser.isConnected()) {
+			mMediaBrowser.disconnect();
+			mMediaBrowser = null;
+			}
+	    resetState();
+		Log.d(TAG, "onStop: Releasing MediaController, Disconnecting from MediaBrowser");
+		}
 
     /**
-     * The internal state of the app needs to revert to what it looks like when it started before
-     * any connections to the {@link MusicService} happens via the {@link MediaSessionCompat}.
-     */
-    private void resetState() {
-        mState.reset();
-        performOnAllListeners(new ListenerCommand() {
-            @Override
-            public void perform(@NonNull MediaBrowserChangeListener listener) {
-                listener.onPlaybackStateChanged(null);
-            }
-        });
-        Log.d(TAG, "resetState: ");
-    }
+	 * The internal state of the app needs to revert to what it looks like when it started before
+	 * any connections to the {@link MusicService} happens via the {@link MediaSessionCompat}.
+	 */
+	private void resetState() {
+		mState.reset();
+		performOnAllListeners(new ListenerCommand() {
+			@Override
+			public void perform(@NonNull MediaBrowserChangeListener listener) {
+				listener.onPlaybackStateChanged(null);
+				}
+		});
+	    Log.d(TAG, "resetState: ");
+		}
 
     public MediaControllerCompat.TransportControls getTransportControls() {
-        if (mMediaController == null) {
-            Log.d(TAG, "getTransportControls: MediaController is null!");
-            throw new IllegalStateException();
-        }
-        return mMediaController.getTransportControls();
-    }
+		if (mMediaController == null) {
+			Log.d(TAG, "getTransportControls: MediaController is null!");
+			throw new IllegalStateException();
+			}
+	    return mMediaController.getTransportControls();
+		}
 
     public void addListener(MediaBrowserChangeListener listener) {
-        if (listener != null) {
-            mListeners.add(listener);
-        }
-    }
+		if (listener != null) {
+			mListeners.add(listener);
+			}
+	}
 
     public void removeListener(MediaBrowserChangeListener listener) {
-        if (listener != null) {
-            if (mListeners.contains(listener)) {
-                mListeners.remove(listener);
-            }
-        }
-    }
+		if (listener != null) {
+			if (mListeners.contains(listener)) {
+				mListeners.remove(listener);
+				}
+		}
+	}
 
     public void performOnAllListeners(@NonNull ListenerCommand command) {
-        for (MediaBrowserChangeListener listener : mListeners) {
-            if (listener != null) {
-                try {
-                    command.perform(listener);
-                } catch (Exception e) {
-                    removeListener(listener);
-                }
-            }
-        }
-    }
+		for (MediaBrowserChangeListener listener : mListeners) {
+			if (listener != null) {
+				try {
+					command.perform(listener);
+					} catch (Exception e) {
+				    removeListener(listener);
+					}
+			}
+		}
+	}
 
     public interface ListenerCommand {
 
-        void perform(@NonNull MediaBrowserChangeListener listener);
-    }
+		void perform(@NonNull MediaBrowserChangeListener listener);
+		}
 
     // Receives callbacks from the MediaBrowser when it has successfully connected to the
-    // MediaBrowserService (MusicService).
-    public class MediaBrowserConnectionCallback extends MediaBrowserCompat.ConnectionCallback {
+	// MediaBrowserService (MusicService).
+	public class MediaBrowserConnectionCallback extends MediaBrowserCompat.ConnectionCallback {
 
-        // Happens as a result of onStart().
-        @Override
-        public void onConnected() {
-            try {
-                // Get a MediaController for the MediaSession.
-                mMediaController = new MediaControllerCompat(mContext,
-                        mMediaBrowser.getSessionToken());
-                mMediaController.registerCallback(mMediaControllerCallback);
+		// Happens as a result of onStart().
+		@Override
+		public void onConnected() {
+			try {
+				// Get a MediaController for the MediaSession.
+				mMediaController = new MediaControllerCompat(mContext,
+				        mMediaBrowser.getSessionToken());
+						mMediaController.registerCallback(mMediaControllerCallback);
 
-                // Sync existing MediaSession state to the UI.
-                mMediaControllerCallback.onMetadataChanged(
-                        mMediaController.getMetadata());
-                mMediaControllerCallback
-                        .onPlaybackStateChanged(mMediaController.getPlaybackState());
+				// Sync existing MediaSession state to the UI.
+				mMediaControllerCallback.onMetadataChanged(
+				        mMediaController.getMetadata());
+						mMediaControllerCallback
+				        .onPlaybackStateChanged(mMediaController.getPlaybackState());
 
-                performOnAllListeners(new ListenerCommand() {
-                    @Override
-                    public void perform(@NonNull MediaBrowserChangeListener listener) {
-                        listener.onConnected(mMediaController);
-                    }
-                });
-            } catch (RemoteException e) {
-                Log.d(TAG, String.format("onConnected: Problem: %s", e.toString()));
-                throw new RuntimeException(e);
-            }
+						performOnAllListeners(new ListenerCommand() {
+					@Override
+					public void perform(@NonNull MediaBrowserChangeListener listener) {
+						listener.onConnected(mMediaController);
+						}
+				});
+			} catch (RemoteException e) {
+			    Log.d(TAG, String.format("onConnected: Problem: %s", e.toString()));
+				throw new RuntimeException(e);
+				}
 
-            mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mMediaBrowserSubscriptionCallback);
-        }
-    }
+		    mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mMediaBrowserSubscriptionCallback);
+			}
+	}
 
     // Receives callbacks from the MediaBrowser when the MediaBrowserService has loaded new media
-    // that is ready for playback.
-    public class MediaBrowserSubscriptionCallback extends MediaBrowserCompat.SubscriptionCallback {
+	// that is ready for playback.
+	public class MediaBrowserSubscriptionCallback extends MediaBrowserCompat.SubscriptionCallback {
 
-        @Override
-        public void onChildrenLoaded(@NonNull String parentId,
-                                     @NonNull List<MediaBrowserCompat.MediaItem> children) {
-            assert mMediaController != null;
+		@Override
+		public void onChildrenLoaded(@NonNull String parentId,
+		                             @NonNull List<MediaBrowserCompat.MediaItem> children) {
+										assert mMediaController != null;
 
-            // Queue up all media items for this simple sample.
-            for (final MediaBrowserCompat.MediaItem mediaItem : children) {
-                if ( (mediaItem != null) && (mediaItem.getDescription() != null) {
-                    mMediaController.addQueueItem(mediaItem.getDescription());
-                }
-            }
+			// Queue up all media items for this simple sample.
+			for (final MediaBrowserCompat.MediaItem mediaItem : children) {
+				if ( (mediaItem != null) && (mediaItem.getDescription() != null) ) {
+					mMediaController.addQueueItem(mediaItem.getDescription());
+					}
+			}
 
-            // Call "playFromMedia" so the UI is updated.
-            mMediaController.getTransportControls().prepare();
-        }
-    }
+		    // Call "playFromMedia" so the UI is updated.
+			mMediaController.getTransportControls().prepare();
+			}
+	}
 
     // Receives callbacks from the MediaController and updates the UI state,
-    // i.e.: Which is the current item, whether it's playing or paused, etc.
-    public class MediaControllerCallback extends MediaControllerCompat.Callback {
+	// i.e.: Which is the current item, whether it's playing or paused, etc.
+	public class MediaControllerCallback extends MediaControllerCompat.Callback {
 
-        @Override
-        public void onMetadataChanged(final MediaMetadataCompat metadata) {
-            // Filtering out needless updates, given that the metadata has not changed.
-            if (isMediaTitleSame(metadata, mState.getMediaMetadata())) {
-                Log.d(TAG, "onMetadataChanged: Filtering out needless onMetadataChanged() update");
-                return;
-            } else {
-                mState.setMediaMetadata(metadata);
-            }
-            performOnAllListeners(new ListenerCommand() {
-                @Override
-                public void perform(@NonNull MediaBrowserChangeListener listener) {
-                    listener.onMetadataChanged(metadata);
-                }
-            });
-        }
+		@Override
+		public void onMetadataChanged(final MediaMetadataCompat metadata) {
+			// Filtering out needless updates, given that the metadata has not changed.
+			if (isMediaTitleSame(metadata, mState.getMediaMetadata())) {
+				Log.d(TAG, "onMetadataChanged: Filtering out needless onMetadataChanged() update");
+				return;
+				} else {
+			    mState.setMediaMetadata(metadata);
+				}
+		    performOnAllListeners(new ListenerCommand() {
+				@Override
+				public void perform(@NonNull MediaBrowserChangeListener listener) {
+					listener.onMetadataChanged(metadata);
+					}
+			});
+		}
 
-        @Override
-        public void onPlaybackStateChanged(@Nullable final PlaybackStateCompat state) {
-            mState.setPlaybackState(state);
-            performOnAllListeners(new ListenerCommand() {
-                @Override
-                public void perform(@NonNull MediaBrowserChangeListener listener) {
-                    listener.onPlaybackStateChanged(state);
-                }
-            });
-        }
+	    @Override
+		public void onPlaybackStateChanged(@Nullable final PlaybackStateCompat state) {
+			mState.setPlaybackState(state);
+			performOnAllListeners(new ListenerCommand() {
+				@Override
+				public void perform(@NonNull MediaBrowserChangeListener listener) {
+					listener.onPlaybackStateChanged(state);
+					}
+			});
+		}
 
-        // This might happen if the MusicService is killed while the Activity is in the
-        // foreground and onStart() has been called (but not onStop()).
-        @Override
-        public void onSessionDestroyed() {
-            resetState();
-            onPlaybackStateChanged(null);
-            Log.d(TAG, "onSessionDestroyed: MusicService is dead!!!");
-        }
+	    // This might happen if the MusicService is killed while the Activity is in the
+		// foreground and onStart() has been called (but not onStop()).
+		@Override
+		public void onSessionDestroyed() {
+			resetState();
+			onPlaybackStateChanged(null);
+			Log.d(TAG, "onSessionDestroyed: MusicService is dead!!!");
+			}
 
-        private boolean isMediaTitleSame(MediaMetadataCompat currentMedia,
-                                         MediaMetadataCompat newMedia) {
-            if (currentMedia == null || newMedia == null) {
-                return false;
-            }
-            String newMediaTitle =
-                    newMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
-            String currentMediaTitle =
-                    currentMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
-            return newMediaTitle.equals(currentMediaTitle);
-        }
+	    private boolean isMediaTitleSame(MediaMetadataCompat currentMedia,
+		                                 MediaMetadataCompat newMedia) {
+											if (currentMedia == null || newMedia == null) {
+				return false;
+				}
+		    String newMediaTitle =
+			        newMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+					String currentMediaTitle =
+			        currentMedia.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+					return newMediaTitle.equals(currentMediaTitle);
+			}
 
-    }
+	}
 
     // A holder class that contains the internal state.
-    public class InternalState {
+	public class InternalState {
 
-        private PlaybackStateCompat playbackState;
-        private MediaMetadataCompat mediaMetadata;
+		private PlaybackStateCompat playbackState;
+		private MediaMetadataCompat mediaMetadata;
 
-        public void reset() {
-            playbackState = null;
-            mediaMetadata = null;
-        }
+		public void reset() {
+			playbackState = null;
+			mediaMetadata = null;
+			}
 
-        public PlaybackStateCompat getPlaybackState() {
-            return playbackState;
-        }
+	    public PlaybackStateCompat getPlaybackState() {
+			return playbackState;
+			}
 
-        public void setPlaybackState(PlaybackStateCompat playbackState) {
-            this.playbackState = playbackState;
-        }
+	    public void setPlaybackState(PlaybackStateCompat playbackState) {
+			this.playbackState = playbackState;
+			}
 
-        public MediaMetadataCompat getMediaMetadata() {
-            return mediaMetadata;
-        }
+	    public MediaMetadataCompat getMediaMetadata() {
+			return mediaMetadata;
+			}
 
-        public void setMediaMetadata(MediaMetadataCompat mediaMetadata) {
-            this.mediaMetadata = mediaMetadata;
-        }
-    }
+	    public void setMediaMetadata(MediaMetadataCompat mediaMetadata) {
+			this.mediaMetadata = mediaMetadata;
+			}
+	}
 
 }
