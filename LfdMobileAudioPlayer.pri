@@ -13,12 +13,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += \
     $$PWD/src/lfdaudioplayer.h \
     $$PWD/src/lfdaudiomedia.h \
-    $$PWD/src/genericQt/genericqtaudioplayer.h
+    $$PWD/src/genericQt/genericqtaudioplayer.h \
+    $$PWD/src/remote/remoteplayer.h
 
 SOURCES += \
     $$PWD/src/lfdaudioplayer.cpp \
     $$PWD/src/lfdaudiomedia.cpp \
-    $$PWD/src/genericQt/genericqtaudioplayer.cpp
+    $$PWD/src/genericQt/genericqtaudioplayer.cpp \
+    $$PWD/src/remote/remoteplayer.cpp
 
 ios {
     QMAKE_CXXFLAGS += -fobjc-arc
