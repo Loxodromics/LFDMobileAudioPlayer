@@ -9,6 +9,7 @@
 
 
 #include <QObject>
+#include <QTimer>
 #include <QWebSocket>
 #include "../lfdaudioplayer.h"
 
@@ -28,11 +29,10 @@ public slots:
 	Q_INVOKABLE virtual void setVolume(int volume) override;
 
 	/// Socket
-	Q_INVOKABLE void connectToServer(const QString serverUrl);
+	Q_INVOKABLE void connectToServer();
+	Q_INVOKABLE void setServerUrl(const QString serverUrl);
 	Q_INVOKABLE void setStationUrl(const QString stationUrl);
-
-signals:
-	void closed();
+	Q_INVOKABLE void startup();
 
 private slots:
 //	void metaDataChanged();
@@ -45,10 +45,13 @@ protected:
 	QWebSocket m_webSocket;
 	QString m_serverUrl;
 	QString m_stationUrl;
+	QTimer m_reconnectTimer;
 
 protected slots:
+	void closed();
 	void onConnected();
 	void onTextMessageReceived(QString message);
+	void checkConnection();
 };
 
 } // namespace filtermusic

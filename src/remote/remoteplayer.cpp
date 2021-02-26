@@ -11,6 +11,10 @@ namespace filtermusic {
 
 RemotePlayer::RemotePlayer(QObject* parent)
 	: AudioPlayer(parent)
+	, m_webSocket()
+	, m_serverUrl(QStringLiteral("ws://192.168.1.100:54321"))
+	, m_stationUrl("")
+	, m_reconnectTimer(this)
 {
 	connect( this, SIGNAL( playPressed() ),
 			 this, SLOT( play() ) );
@@ -44,7 +48,14 @@ void RemotePlayer::onTextMessageReceived(QString message)
 //		AudioPlayer::pause();
 //		emit pausePressed();
 	}
-//	m_webSocket.close();
+}
+
+void RemotePlayer::checkConnection()
+{
+	qDebug() << "RemotePlayer::checkConnection()" << this->m_webSocket.state();
+	if (this->m_webSocket.state() != QAbstractSocket::ConnectedState) {
+		this->connectToServer();
+	}
 }
 
 void RemotePlayer::play()
@@ -66,15 +77,35 @@ void RemotePlayer::setVolume(int volume)
 	this->m_webSocket.sendTextMessage("volume:" + QString::number(volume));
 }
 
-void RemotePlayer::connectToServer(const QString serverUrl)
+void RemotePlayer::connectToServer()
+{
+	m_webSocket.open(QUrl(this->m_serverUrl));
+}
+
+void RemotePlayer::setServerUrl(const QString serverUrl)
 {
 	this->m_serverUrl = serverUrl;
-	m_webSocket.open(QUrl(this->m_serverUrl));
 }
 
 void RemotePlayer::setStationUrl(const QString stationUrl)
 {
 	this->m_stationUrl = stationUrl;
+}
+
+void RemotePlayer::startup()
+{
+	this->m_serverUrl = QStringLiteral("ws://192.168.1.100:54321");
+	this->connectToServer();
+
+	this->m_reconnectTimer.connect(&this->m_reconnectTimer, &QTimer::timeout,
+								   this, &RemotePlayer::checkConnection);
+	this->m_reconnectTimer.start(30000);
+}
+
+void RemotePlayer::closed()
+{
+	qDebug() << "RemotePlayer::closed()";
+	this->connectToServer();
 }
 
 } // namespace filtermusic
