@@ -60,6 +60,12 @@ void RemotePlayer::pause()
 	this->m_webSocket.sendTextMessage("stop");
 }
 
+void RemotePlayer::setVolume(int volume)
+{
+	qDebug() << "RemotePlayer::setVolume()" << QString::number(volume);
+	this->m_webSocket.sendTextMessage("volume:" + QString::number(volume));
+}
+
 void RemotePlayer::connectToServer(const QString serverUrl)
 {
 	this->m_serverUrl = serverUrl;

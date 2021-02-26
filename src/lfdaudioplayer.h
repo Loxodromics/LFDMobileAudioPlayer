@@ -39,6 +39,7 @@ public:
 	Q_INVOKABLE virtual void play();
 	Q_INVOKABLE virtual void pause();
 	Q_INVOKABLE virtual bool playing() const;
+	Q_INVOKABLE virtual void setVolume(int volume);
 
 	AudioPlayer::PlayingState playingState() const;
 

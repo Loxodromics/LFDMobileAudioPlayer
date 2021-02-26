@@ -103,6 +103,12 @@ void AudioPlayer::setTitle(QString title)
 	emit titleChanged(m_title);
 }
 
+void AudioPlayer::setVolume(int volume)
+{
+	Q_UNUSED(volume);
+	/// subclass responsibility
+}
+
 AudioPlayer::PlayingState AudioPlayer::playingState() const
 {
 	return this->m_playingState;

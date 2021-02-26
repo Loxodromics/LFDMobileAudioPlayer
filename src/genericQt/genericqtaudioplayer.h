@@ -10,24 +10,25 @@ namespace LFD {
 class GenericQtAudioPlayer : public LFD::AudioPlayer
 {
 
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit GenericQtAudioPlayer( QObject* parent = nullptr );
+	explicit GenericQtAudioPlayer( QObject* parent = nullptr );
 
 public slots:
-    /// AudioPlayer override
-    Q_INVOKABLE virtual void play() override;
-    Q_INVOKABLE virtual void pause() override;
+	/// AudioPlayer override
+	Q_INVOKABLE virtual void play() override;
+	Q_INVOKABLE virtual void pause() override;
+	Q_INVOKABLE virtual void setVolume(int volume) override;
 
 private slots:
-    void metaDataChanged();
-    void statusChanged(QMediaPlayer::MediaStatus status);
-    void stateChanged(QMediaPlayer::State state);
-    void bufferingProgress(int progress);
-    void displayErrorMessage();
+	void metaDataChanged();
+	void statusChanged(QMediaPlayer::MediaStatus status);
+	void stateChanged(QMediaPlayer::State state);
+	void bufferingProgress(int progress);
+	void displayErrorMessage();
 
 protected:
-    QMediaPlayer m_player;
+	QMediaPlayer m_player;
 
 };
 

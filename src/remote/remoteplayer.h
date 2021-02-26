@@ -25,6 +25,7 @@ public slots:
 	/// AudioPlayer override
 	Q_INVOKABLE virtual void play() override;
 	Q_INVOKABLE virtual void pause() override;
+	Q_INVOKABLE virtual void setVolume(int volume) override;
 
 	/// Socket
 	Q_INVOKABLE void connectToServer(const QString serverUrl);
