@@ -34,7 +34,7 @@ void RemotePlayer::onConnected()
 	qDebug() << "WebSocket connected";
 	connect(&m_webSocket, &QWebSocket::textMessageReceived,
 			this, &RemotePlayer::onTextMessageReceived);
-	m_webSocket.sendTextMessage(QStringLiteral("Hello, world!"));
+	m_webSocket.sendTextMessage(QStringLiteral("Hello, Server!"));
 }
 
 void RemotePlayer::onTextMessageReceived(QString message)
@@ -47,6 +47,10 @@ void RemotePlayer::onTextMessageReceived(QString message)
 		this->setPlayingState(PlayingState::NotConnected);
 //		AudioPlayer::pause();
 //		emit pausePressed();
+	}
+	else if (message.startsWith("volume")) {
+		QString volume = message.mid(7);
+		this->setVolume(volume.toInt());
 	}
 }
 
@@ -73,8 +77,11 @@ void RemotePlayer::pause()
 
 void RemotePlayer::setVolume(int volume)
 {
-	qDebug() << "RemotePlayer::setVolume()" << QString::number(volume);
-	this->m_webSocket.sendTextMessage("volume:" + QString::number(volume));
+	if (this->m_volume != volume) {
+		qDebug() << "RemotePlayer::setVolume()" << QString::number(volume);
+		this->m_webSocket.sendTextMessage("volume:" + QString::number(volume));
+	}
+	AudioPlayer::setVolume(volume);
 }
 
 void RemotePlayer::connectToServer()

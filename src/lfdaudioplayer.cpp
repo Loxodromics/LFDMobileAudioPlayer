@@ -15,7 +15,8 @@ AudioPlayer::AudioPlayer(QObject* parent)
 	: QObject(parent),
 	  m_playingState(PlayingState::NotConnected),
 	  m_media(),
-	  m_title("")
+	  m_title(""),
+	  m_volume(100)
 {
 //	QString localImageUrl = qApp->applicationDirPath();
 //	localImageUrl.append("/res/filtermusic-logo.jpg");
@@ -73,6 +74,11 @@ QString AudioPlayer::title() const
 	return this->m_title;
 }
 
+int AudioPlayer::volume() const
+{
+	return m_volume;
+}
+
 void AudioPlayer::setMedia(AudioMedia* media)
 {
 	qDebug() << "AudioPlayer::setMedia";
@@ -105,8 +111,11 @@ void AudioPlayer::setTitle(QString title)
 
 void AudioPlayer::setVolume(int volume)
 {
-	Q_UNUSED(volume);
-	/// subclass responsibility
+	if (this->m_volume == volume)
+		return;
+
+	this->m_volume = volume;
+	emit volumeChanged(this->m_volume);
 }
 
 AudioPlayer::PlayingState AudioPlayer::playingState() const

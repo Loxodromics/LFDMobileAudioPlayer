@@ -35,6 +35,7 @@ public:
 	Q_PROPERTY(bool playing READ playing NOTIFY playingChanged)
 	Q_PROPERTY(PlayingState playingState READ playingState NOTIFY playingStateChanged)
 	Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+	Q_PROPERTY(int volume READ volume WRITE setVolume NOTIFY volumeChanged)
 
 	Q_INVOKABLE virtual void play();
 	Q_INVOKABLE virtual void pause();
@@ -45,6 +46,7 @@ public:
 
 	AudioMedia* media() const;
 	QString title() const;
+	int volume() const;
 
 public slots:
 	virtual void setMedia(LFD::AudioMedia* media);
@@ -62,6 +64,7 @@ signals:
 	void titleChanged( QString title );
 	void playPressed();
 	void pausePressed();
+	void volumeChanged(int volume);
 
 protected:
 	void setPlayingState( const PlayingState& playingState );
@@ -69,6 +72,7 @@ protected:
 	PlayingState m_playingState;
 	AudioMedia* m_media;
 	QString m_title;
+	int m_volume;
 };
 
 } /// namespace LFD
