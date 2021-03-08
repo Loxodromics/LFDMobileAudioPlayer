@@ -7,6 +7,9 @@
 //
 #include "lfdaudiomedia.h"
 
+#include <QJsonObject>
+#include <QJsonDocument>
+
 namespace LFD {
 
 AudioMedia::AudioMedia(QObject* parent)
@@ -170,6 +173,51 @@ QString AudioMedia::url() const
 void AudioMedia::setUrl(const QString& url)
 {
 	m_url = url;
+}
+
+QString AudioMedia::toJsonString()
+{
+	QJsonObject json;
+	json["hasNext"] = m_hasNext;
+	json["hasPrevious"] = m_hasPrevious;
+	json["isLikable"] = m_isLikable;
+	json["isLiked"] = m_isLiked;
+	json["isStream"] = m_isStream;
+	json["canSeek"] = m_canSeek;
+	json["id"] = m_id;
+	json["title"] = m_title;
+	json["artist"] = m_artist;
+	json["album"] = m_album;
+	json["localImageUrl"] = m_localImageUrl;
+	json["url"] = m_url;
+	return QJsonDocument(json).toJson();
+}
+
+void AudioMedia::fromJsonString(const QString jsonString)
+{
+	QJsonObject json = QJsonDocument::fromJson(jsonString.toUtf8()).object();
+	if (json.contains("hasNext") && json["hasNext"].isBool())
+		m_hasNext = json["hasNext"].toBool();
+	if (json.contains("hasPrevious") && json["hasPrevious"].isBool())
+		m_hasPrevious = json["hasPrevious"].toBool();
+	if (json.contains("isLikable") && json["isLikable"].isBool())
+		m_isLikable = json["isLikable"].toBool();
+	if (json.contains("isStream") && json["isStream"].isBool())
+		m_isStream = json["isStream"].toBool();
+	if (json.contains("canSeek") && json["canSeek"].isBool())
+		m_canSeek = json["canSeek"].toBool();
+	if (json.contains("id") && json["id"].isString())
+		m_id = json["id"].toString();
+	if (json.contains("title") && json["title"].isString())
+		m_title = json["title"].toString();
+	if (json.contains("artist") && json["artist"].isString())
+		m_artist = json["artist"].toString();
+	if (json.contains("album") && json["album"].isString())
+		m_album = json["album"].toString();
+	if (json.contains("localImageUrl") && json["localImageUrl"].isString())
+		m_localImageUrl = json["localImageUrl"].toString();
+	if (json.contains("url") && json["url"].isString())
+		m_url = json["url"].toString();
 }
 
 } /// namespace LFD

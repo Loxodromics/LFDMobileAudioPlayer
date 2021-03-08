@@ -68,9 +68,8 @@ public:
 	QString url() const;
 	void setUrl(const QString& url);
 
-signals:
-
-public slots:
+	QString toJsonString();
+	void fromJsonString(const QString jsonString);
 
 protected:
 	bool m_hasNext;
