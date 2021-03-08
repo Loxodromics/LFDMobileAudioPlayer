@@ -52,6 +52,12 @@ void RemotePlayer::onTextMessageReceived(QString message)
 		QString volume = message.mid(7);
 		this->setVolume(volume.toInt());
 	}
+	else if (message.startsWith("lfdaudiomedia:")) {
+		QString jsonBase64 = message.mid(14);
+		QByteArray byteArray = QByteArray::fromBase64(jsonBase64.toUtf8());
+		this->m_localMedia.fromJsonString(byteArray);
+		emit this->mediaChanged(&this->m_localMedia);
+	}
 }
 
 void RemotePlayer::checkConnection()
@@ -67,6 +73,9 @@ void RemotePlayer::play()
 	qDebug() << "RemotePlayer::play()";
 //	this->m_webSocket.sendTextMessage("play:http://stream-uk1.radioparadise.com/mp3-192");
 	this->m_webSocket.sendTextMessage("play:" + this->m_media->url());
+	qDebug() << "lfdaudiomedia:" << this->m_media->toJsonString();
+	qDebug() << "lfdaudiomedia:" << this->m_media->toJsonString().toUtf8().toBase64();
+	this->m_webSocket.sendTextMessage("lfdaudiomedia:" + this->m_media->toJsonString().toUtf8().toBase64());
 }
 
 void RemotePlayer::pause()

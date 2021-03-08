@@ -46,6 +46,7 @@ protected:
 	QString m_serverUrl;
 	QString m_stationUrl;
 	QTimer m_reconnectTimer;
+	LFD::AudioMedia m_localMedia;
 
 protected slots:
 	void closed();
