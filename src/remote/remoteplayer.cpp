@@ -121,7 +121,7 @@ void RemotePlayer::startup()
 void RemotePlayer::closed()
 {
 	qDebug() << "RemotePlayer::closed()";
-	this->connectToServer();
+//	this->connectToServer();
 }
 
 } // namespace filtermusic
